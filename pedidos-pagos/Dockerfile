@@ -1,23 +1,25 @@
-# Usar una imagen base de Java 17
-FROM eclipse-temurin:17-jdk-alpine
+# Usar imagen de Maven con Java 17
+FROM maven:3.9-eclipse-temurin-17 AS build
 
-# Establecer directorio de trabajo
 WORKDIR /app
 
-# Copiar el archivo pom.xml
+# Copiar pom.xml y descargar dependencias
 COPY pom.xml .
-
-# Descargar dependencias
 RUN mvn dependency:go-offline
 
-# Copiar el código fuente
+# Copiar código fuente y compilar
 COPY src ./src
-
-# Compilar el proyecto
 RUN mvn clean package -DskipTests
 
-# Exponer el puerto 8080
+# Imagen final más ligera
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /app
+
+# Copiar solo el JAR compilado desde la etapa de build
+COPY --from=build /app/target/*.jar app.jar
+
 EXPOSE 8080
 
-# Comando para ejecutar la aplicación
-CMD ["java", "-jar", "target/pedidos-pagos-1.0.0.jar"]
+# Ejecutar la aplicación
+ENTRYPOINT ["java", "-jar", "app.jar"]
