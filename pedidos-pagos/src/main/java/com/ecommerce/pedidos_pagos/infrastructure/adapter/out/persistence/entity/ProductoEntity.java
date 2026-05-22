@@ -12,7 +12,7 @@ public class ProductoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "productoID")
+    @Column(name = "productoid")
     private Long productoId;
 
     @Column(name = "nombre", nullable = false, length = 100)
@@ -27,13 +27,12 @@ public class ProductoEntity {
     @Column(name = "stock", nullable = false)
     private Integer stock;
 
+    @Column(name = "imagenurl", length = 500)
+    private String imagenUrl;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categoriaid")
     private CategoriaEntity categoria;
-
-    // ✅ ESTE CAMPO DEBE ESTAR AQUÍ
-    @Column(name = "imagenurl", length = 500)
-    private String imagenUrl;
 
     // Si usas relaciones inversas, pueden estar aquí
     // @OneToMany(mappedBy = "producto")
