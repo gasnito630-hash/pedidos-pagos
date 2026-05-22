@@ -13,11 +13,9 @@ import java.util.List;
  * Incluye anotaciones JPA porque Producto tiene relación @ManyToOne con ella.
  */
 @Data
-@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "categorias") // ⚠️ Ajusta si tu tabla se llama "categoria" (singular)
 public class Categoria {
 
     @Id
