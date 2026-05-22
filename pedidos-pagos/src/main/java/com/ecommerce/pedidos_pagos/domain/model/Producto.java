@@ -10,11 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Producto")
 public class Producto {
 
     @Id
