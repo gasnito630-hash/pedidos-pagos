@@ -7,32 +7,32 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "Producto", schema = "dbo")
+@Table(name = "producto", schema = "dbo")
 public class ProductoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ProductoID")
+    @Column(name = "productoID")
     private Long productoId;
 
-    @Column(name = "Nombre", nullable = false, length = 100)
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
-    @Column(name = "SKU", nullable = false, length = 20, unique = true)
+    @Column(name = "sku", nullable = false, length = 20, unique = true)
     private String sku;
 
-    @Column(name = "Precio", nullable = false, precision = 10, scale = 2)
+    @Column(name = "precio", nullable = false, precision = 10, scale = 2)
     private BigDecimal precio;
 
-    @Column(name = "Stock", nullable = false)
+    @Column(name = "stock", nullable = false)
     private Integer stock;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CategoriaID")
+    @JoinColumn(name = "categoriaid")
     private CategoriaEntity categoria;
 
     // ✅ ESTE CAMPO DEBE ESTAR AQUÍ
-    @Column(name = "ImagenURL", length = 500)
+    @Column(name = "imagenurl", length = 500)
     private String imagenUrl;
 
     // Si usas relaciones inversas, pueden estar aquí
