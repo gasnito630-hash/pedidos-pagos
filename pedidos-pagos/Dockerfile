@@ -1,5 +1,5 @@
-# Usar imagen de Maven con Java 17
-FROM maven:3.9-eclipse-temurin-17 AS build
+# Usar imagen de Maven con Java 21
+FROM maven:3.9-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
@@ -11,8 +11,8 @@ RUN mvn dependency:go-offline
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# Imagen final más ligera
-FROM eclipse-temurin:17-jre-alpine
+# Imagen final más ligera con Java 21
+FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
