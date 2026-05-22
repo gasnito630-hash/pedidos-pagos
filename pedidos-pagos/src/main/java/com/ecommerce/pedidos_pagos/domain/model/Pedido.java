@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Entity
-@Table(name = "pedidos")
 public class Pedido {
 
     @Id
