@@ -10,11 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "usuarios") // ⚠️ Ajusta si tu tabla se llama "usuario" (singular)
 public class Usuario {
 
     @Id
