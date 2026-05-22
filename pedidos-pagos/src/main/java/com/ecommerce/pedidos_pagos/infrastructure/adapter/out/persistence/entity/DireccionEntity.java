@@ -9,19 +9,27 @@ import lombok.Data;
 public class DireccionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "DireccionID")
+    @Column(name = "direccionid")
     private Long direccionId;
 
-    @Column(name = "UsuarioID")
+    @Column(name = "usuarioid", nullable = false)
     private Long usuarioId;
-    @Column(name = "Calle")
+
+    @Column(name = "calle", nullable = false, length = 200)
     private String calle;
-    @Column(name = "Numero")
+
+    @Column(name = "numero", nullable = false, length = 20)
     private String numero;
-    @Column(name = "Ciudad")
+
+    @Column(name = "ciudad", length = 100)
     private String ciudad;
-    @Column(name = "Pais")
+
+    @Column(name = "pais", length = 100)
     private String pais;
-    @Column(name = "EsPrincipal")
+
+    @Column(name = "codigopostal", length = 20)
+    private String codigoPostal;
+
+    @Column(name = "esprincipal")
     private Boolean esPrincipal;
 }
