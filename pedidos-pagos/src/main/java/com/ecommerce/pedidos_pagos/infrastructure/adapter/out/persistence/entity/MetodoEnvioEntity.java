@@ -5,24 +5,30 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "MetodoEnvio")
+@Table(name = "metodoenvio")
 @Data
 public class MetodoEnvioEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MetodoID")
+    @Column(name = "metodoid")
     private Long metodoId;
 
-    @Column(name = "Nombre", length = 100)
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
-    @Column(name = "Descripcion", length = 255)
+
+    @Column(name = "descripcion", length = 500)
     private String descripcion;
-    @Column(name = "CostoBase", precision = 10, scale = 2)
+
+    @Column(name = "costobase", precision = 10, scale = 2)
     private BigDecimal costoBase;
-    @Column(name = "DiasEntregaMin")
+
+    @Column(name = "diasentregamin")
     private Integer diasEntregaMin;
-    @Column(name = "DiasEntregaMax")
+
+    @Column(name = "diasentregamax")
     private Integer diasEntregaMax;
-    @Column(name = "Activo")
+
+    @Column(name = "activo")
     private Boolean activo;
 }
