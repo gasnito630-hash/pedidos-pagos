@@ -12,31 +12,31 @@ public class PedidoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "PedidoID")
+    @Column(name = "pedidoid")
     private Long pedidoId;
 
-    @Column(name = "UsuarioID")
+    @Column(name = "usuarioid", nullable = false)
     private Long usuarioId;
 
-    @Column(name = "DireccionEnvioID")
+    @Column(name = "direccionenvioid")
     private Long direccionEnvioId;
 
-    @Column(name = "Estado", length = 20)
+    @Column(name = "estado", nullable = false, length = 50)
     private String estado;
 
-    @Column(name = "MontoTotal", precision = 10, scale = 2)
+    @Column(name = "montototal", nullable = false, precision = 10, scale = 2)
     private BigDecimal montoTotal;
 
-    @Column(name = "CreadoEn")
+    @Column(name = "creadoen")
     private LocalDateTime creadoEn;
 
-    @Column(name = "ActualizadoEn")
+    @Column(name = "actualizadoen")
     private LocalDateTime actualizadoEn;
 
-    @Column(name = "DireccionEnvio", length = 255)
+    @Column(name = "direccionenvio", length = 500)
     private String direccionEnvio;
 
-    @Column(name = "TelefonoContacto", length = 20)
+    @Column(name = "telefonocontacto", length = 20)
     private String telefonoContacto;
 
     // ✅ NO AGREGAR metodoPago - No existe en la tabla Pedido
