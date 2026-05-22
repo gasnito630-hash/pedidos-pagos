@@ -11,28 +11,28 @@ public class UsuarioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "UsuarioID")
+    @Column(name = "usuarioid")
     private Long usuarioId;
 
-    @Column(name = "Email", nullable = false, unique = true, length = 150)
+    @Column(name = "email", nullable = false, unique = true, length = 150)
     private String email;
 
-    @Column(name = "Password", nullable = false, length = 255)
+    @Column(name = "password", nullable = false, length = 255)
     private String password;
 
-    @Column(name = "Nombre", nullable = false, length = 100)
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
-    @Column(name = "Apellido", nullable = false, length = 100)
+    @Column(name = "apellido", nullable = false, length = 100)
     private String apellido;
 
-    @Column(name = "Rol", nullable = false, length = 20)
+    @Column(name = "rol", nullable = false, length = 20)
     private String rol;
 
-    @Column(name = "Activo")
+    @Column(name = "activo")
     private Boolean activo;
 
-    @Column(name = "CreadoEn") // ← Nombre EXACTO como en SQL Server
+    @Column(name = "creadoen")
     private LocalDateTime creadoEn;
 
     public Long getUsuarioId() {
