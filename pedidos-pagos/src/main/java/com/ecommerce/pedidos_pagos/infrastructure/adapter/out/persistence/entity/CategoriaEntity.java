@@ -3,23 +3,22 @@ package com.ecommerce.pedidos_pagos.infrastructure.adapter.out.persistence.entit
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Data
 @Entity
-@Table(name = "Categoria") // ← Sugiero plural para consistencia con "productos"
+@Table(name = "categoria")
+@Data
 public class CategoriaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CategoriaID")
+    @Column(name = "categoriaid")
     private Long categoriaId;
 
-    @Column(name = "Nombre", nullable = false, length = 100)
+    @Column(name = "nombre", nullable = false, length = 100, unique = true)
     private String nombre;
 
-    @Column(name = "Descripcion", length = 255)
+    @Column(name = "descripcion", length = 255)
     private String descripcion;
 
-    // Si tu tabla NO tiene la columna "Activo", comenta o elimina esta línea:
-    @Column(name = "Activo")
+    @Column(name = "activo")
     private Boolean activo;
 }
