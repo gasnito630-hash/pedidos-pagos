@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | E-Commerce Pedidos y Pagos</title>
+
+    <!-- Verificación de sesión -->
     <script>
         (function () {
             const token = localStorage.getItem('token');
@@ -13,1149 +15,46 @@
             }
         })();
     </script>
+
+    <!-- Fuentes e Iconos -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* ========================================
-           VARIABLES & THEME (Mismo diseño profesional)
-           ======================================== */
-        :root {
-            --bg-body: #0b0f19;
-            --bg-sidebar: #111827;
-            --bg-card: #1f2937;
-            --border-color: #374151;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            overflow-x: hidden;
-        }
-
-        /* SIDEBAR */
-        .sidebar {
-            width: 280px;
-            background-color: var(--bg-sidebar);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            padding: 24px 16px;
-            position: fixed;
-            height: 100vh;
-            z-index: 100;
-            overflow-y: auto;
-        }
-
-        .sidebar-logo {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 40px;
-            padding-left: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .sidebar-logo span {
-            color: var(--primary);
-        }
-
-        .menu-section {
-            margin-bottom: 24px;
-        }
-
-        .menu-section-title {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            padding-left: 12px;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-        }
-
-        .menu-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .menu-item button {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            color: var(--text-muted);
-            background: none;
-            border: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            border-radius: 10px;
-            cursor: pointer;
-            text-align: left;
-            transition: all 0.2s;
-        }
-
-        .menu-item.active button,
-        .menu-item button:hover {
-            background-color: var(--bg-card);
-            color: var(--text-main);
-        }
-
-        .sidebar-footer {
-            border-top: 1px solid var(--border-color);
-            padding-top: 20px;
-            margin-top: auto;
-        }
-
-        .user-card {
-            background: var(--bg-card);
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-        }
-
-        .user-name {
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin-bottom: 4px;
-        }
-
-        .user-email {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-
-        .user-role {
-            font-size: 0.75rem;
-            color: var(--primary);
-            background: rgba(99, 102, 241, 0.15);
-            padding: 3px 10px;
-            border-radius: 12px;
-            display: inline-block;
-            font-weight: 600;
-        }
-
-        .btn-logout {
-            width: 100%;
-            padding: 10px;
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--danger);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-logout:hover {
-            background: var(--danger);
-            color: white;
-        }
-
-        /* MAIN */
-        .main-content {
-            margin-left: 280px;
-            flex: 1;
-            padding: 32px 40px;
-            width: calc(100% - 280px);
-        }
-
-        .page-header {
-            margin-bottom: 32px;
-        }
-
-        .page-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .page-subtitle {
-            color: var(--text-muted);
-            font-size: 1rem;
-        }
-
-        /* TOP BAR */
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .search-box {
-            position: relative;
-            flex: 1;
-            max-width: 500px;
-            min-width: 300px;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 14px 16px 14px 48px;
-            background-color: var(--bg-sidebar);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            color: var(--text-main);
-            font-size: 0.95rem;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .search-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 1.1rem;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.2s;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
-        }
-
-        .cart-badge {
-            background: white;
-            color: var(--primary);
-            font-size: 0.75rem;
-            padding: 2px 8px;
-            border-radius: 20px;
-            font-weight: 700;
-        }
-
-        /* CATEGORIES */
-        .categories-scroll {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 32px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            scrollbar-width: thin;
-            scrollbar-color: var(--border-color) transparent;
-        }
-
-        .category-chip {
-            background-color: var(--bg-sidebar);
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 10px 20px;
-            border-radius: 24px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-
-        .category-chip:hover {
-            border-color: var(--primary);
-            color: var(--text-main);
-        }
-
-        .category-chip.active {
-            background-color: var(--primary);
-            border-color: var(--primary);
-            color: white;
-        }
-
-        /* PRODUCTS */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
-            margin-bottom: 40px;
-        }
-
-        .product-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: all 0.3s;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border-color: var(--primary);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, var(--bg-sidebar) 0%, var(--bg-card) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .product-info {
-            padding: 20px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-category {
-            font-size: 0.75rem;
-            color: var(--primary);
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .product-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-
-        .product-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .stock-badge {
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--success);
-            padding: 3px 10px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.8rem;
-        }
-
-        .stock-badge.low {
-            background: rgba(245, 158, 11, 0.15);
-            color: var(--warning);
-        }
-
-        .product-price {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 16px;
-        }
-
-        .btn-add-cart {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-top: auto;
-        }
-
-        .btn-add-cart:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .btn-add-cart:disabled {
-            background-color: var(--bg-sidebar);
-            color: var(--text-muted);
-            cursor: not-allowed;
-        }
-
-        /* CART */
-        .cart-sidebar {
-            position: fixed;
-            right: -450px;
-            top: 0;
-            width: 450px;
-            height: 100vh;
-            background-color: var(--bg-sidebar);
-            border-left: 1px solid var(--border-color);
-            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
-            z-index: 200;
-            display: flex;
-            flex-direction: column;
-            transition: right 0.3s ease;
-        }
-
-        .cart-sidebar.open {
-            right: 0;
-        }
-
-        .cart-header {
-            padding: 24px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .cart-header h3 {
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-
-        .btn-close {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 4px;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
-
-        .btn-close:hover {
-            background-color: var(--bg-card);
-            color: var(--text-main);
-        }
-
-        .cart-items {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px;
-        }
-
-        .cart-item {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-            display: flex;
-            gap: 16px;
-        }
-
-        .cart-item-image {
-            width: 80px;
-            height: 80px;
-            background: var(--bg-body);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            flex-shrink: 0;
-        }
-
-        .cart-item-details {
-            flex: 1;
-        }
-
-        .cart-item-name {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .cart-item-price {
-            color: var(--primary);
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .btn-qty {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-body);
-            color: var(--text-main);
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-
-        .btn-qty:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-        }
-
-        .btn-remove {
-            margin-left: auto;
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--danger);
-            border: none;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-remove:hover {
-            background: var(--danger);
-            color: white;
-        }
-
-        .cart-footer {
-            padding: 24px;
-            border-top: 1px solid var(--border-color);
-            background-color: var(--bg-card);
-        }
-
-        .cart-summary {
-            margin-bottom: 20px;
-        }
-
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 0.95rem;
-        }
-
-        .summary-row.total {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--text-main);
-            border-top: 1px solid var(--border-color);
-            padding-top: 16px;
-            margin-top: 16px;
-        }
-
-        .btn-checkout {
-            width: 100%;
-            padding: 16px;
-            background-color: var(--success);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 1.05rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-checkout:hover {
-            background-color: #059669;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
-        }
-
-        .empty-cart {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-muted);
-        }
-
-        .empty-cart-icon {
-            font-size: 4rem;
-            margin-bottom: 16px;
-            opacity: 0.5;
-        }
-
-        /* MODALS */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 300;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--bg-sidebar);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            width: 100%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            padding: 24px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-header h3 {
-            font-size: 1.4rem;
-            font-weight: 700;
-        }
-
-        .modal-body {
-            padding: 24px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text-main);
-        }
-
-        .form-input,
-        .form-select,
-        .form-textarea {
-            width: 100%;
-            padding: 12px 16px;
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            color: var(--text-main);
-            font-size: 0.95rem;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .form-input:focus,
-        .form-select:focus,
-        .form-textarea:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .form-textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .payment-methods {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 8px;
-        }
-
-        .payment-option {
-            padding: 16px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
-        }
-
-        .payment-option:hover {
-            border-color: var(--primary);
-        }
-
-        .payment-option.selected {
-            border-color: var(--primary);
-            background: rgba(99, 102, 241, 0.1);
-        }
-
-        .payment-option-icon {
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-
-        .payment-option-name {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .modal-footer {
-            padding: 24px;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            gap: 12px;
-        }
-
-        .btn-secondary {
-            flex: 1;
-            padding: 14px;
-            background: var(--bg-card);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-secondary:hover {
-            background: var(--bg-body);
-        }
-
-        /* TABLES */
-        .table-container {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            overflow: hidden;
-            margin-top: 24px;
-        }
-
-        .table-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        thead {
-            background-color: var(--bg-sidebar);
-        }
-
-        th {
-            padding: 16px 24px;
-            text-align: left;
-            font-weight: 600;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        td {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        .order-id {
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .status-badge {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        .status-pendiente {
-            background: rgba(245, 158, 11, 0.15);
-            color: var(--warning);
-        }
-
-        .status-procesando {
-            background: rgba(99, 102, 241, 0.15);
-            color: var(--primary);
-        }
-
-        .status-completado {
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--success);
-        }
-
-        .status-cancelado {
-            background: rgba(239, 68, 68, 0.15);
-            color: var(--danger);
-        }
-
-        .btn-view {
-            padding: 8px 16px;
-            background: var(--bg-sidebar);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-view:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-        }
-
-        /* ORDER DETAIL */
-        .order-items-list {
-            margin: 20px 0;
-        }
-
-        .order-item {
-            display: flex;
-            gap: 16px;
-            padding: 16px;
-            background: var(--bg-sidebar);
-            border-radius: 12px;
-            margin-bottom: 12px;
-        }
-
-        .order-item-image {
-            width: 60px;
-            height: 60px;
-            background: var(--bg-card);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-        }
-
-        .order-item-info {
-            flex: 1;
-        }
-
-        .order-item-name {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .order-item-meta {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        .order-item-price {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 1.1rem;
-        }
-
-        /* SHIPPING INFO */
-        .shipping-info {
-            background: var(--bg-sidebar);
-            padding: 16px;
-            border-radius: 12px;
-            margin: 16px 0;
-            border-left: 4px solid var(--primary);
-        }
-
-        .shipping-info-title {
-            font-weight: 600;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .shipping-info-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            margin-bottom: 4px;
-        }
-
-        .shipping-info-row strong {
-            color: var(--text-main);
-        }
-
-        .tracking-code {
-            font-family: monospace;
-            background: var(--bg-card);
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-
-        /* TOAST */
-        .toast-container {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .toast {
-            background: var(--bg-card);
-            border-left: 4px solid var(--primary);
-            border-radius: 12px;
-            padding: 16px 20px;
-            min-width: 320px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .toast.success {
-            border-left-color: var(--success);
-        }
-
-        .toast.error {
-            border-left-color: var(--danger);
-        }
-
-        .toast.warning {
-            border-left-color: var(--warning);
-        }
-
-        .toast-title {
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .toast-message {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        /* UTILS */
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 60px;
-            color: var(--text-muted);
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border-color);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-right: 16px;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 80px 20px;
-            color: var(--text-muted);
-        }
-
-        .empty-state-icon {
-            font-size: 5rem;
-            margin-bottom: 20px;
-            opacity: 0.4;
-        }
-
-        .empty-state-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--text-main);
-            margin-bottom: 8px;
-        }
-
-        .view-section {
-            display: none;
-        }
-
-        .view-section.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            margin-bottom: 32px;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 24px;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s;
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-                width: 100%;
-            }
-
-            .cart-sidebar {
-                width: 100%;
-                right: -100%;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .payment-methods {
-                grid-template-columns: 1fr;
-            }
-
-            .top-bar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .search-box {
-                max-width: 100%;
-                min-width: 100%;
-            }
-
-            .btn-remove {
-                margin-left: auto;
-                background: rgba(239, 68, 68, 0.1);
-                color: var(--danger);
-                border: none;
-                padding: 6px 12px;
-                border-radius: 8px;
-                font-size: 0.85rem;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.2s;
-            }
-
-            .btn-remove:hover {
-                background: var(--danger);
-                color: white;
-            }
-        }
-    </style>
+    <!-- FontAwesome para iconos profesionales -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="dashboard.css">
 </head>
 
 <body>
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <div>
-            <div class="sidebar-logo">📦 <span>Core</span>Commerce</div>
+            <div class="sidebar-logo"><i class="fa-solid fa-box"></i> <span>Core</span>Commerce</div>
             <div class="menu-section">
                 <div class="menu-section-title">Principal</div>
                 <ul class="menu-list">
-                    <li class="menu-item active" id="btn-catalogo"><button onclick="switchView('catalogo')">🛒
-                            Catálogo</button></li>
-                    <li class="menu-item" id="btn-pedidos"><button onclick="switchView('pedidos')">📋 Mis
-                            Pedidos</button></li>
+                    <li class="menu-item active" id="btn-catalogo">
+                        <button onclick="switchView('catalogo')"><i class="fa-solid fa-cart-shopping"></i>
+                            Catálogo</button>
+                    </li>
+                    <li class="menu-item" id="btn-pedidos">
+                        <button onclick="switchView('pedidos')"><i class="fa-solid fa-clipboard-list"></i> Mis
+                            Pedidos</button>
+                    </li>
                 </ul>
             </div>
             <div class="menu-section">
                 <div class="menu-section-title">Cuenta</div>
                 <ul class="menu-list">
-                    <li class="menu-item" id="btn-direcciones"><button onclick="switchView('direcciones')">📍
-                            Direcciones</button></li>
-                    <li class="menu-item" id="btn-config"><button onclick="switchView('config')">⚙️
-                            Configuración</button></li>
+                    <li class="menu-item" id="btn-direcciones">
+                        <button onclick="switchView('direcciones')"><i class="fa-solid fa-location-dot"></i>
+                            Direcciones</button>
+                    </li>
+                    <li class="menu-item" id="btn-config">
+                        <button onclick="switchView('config')"><i class="fa-solid fa-gear"></i> Configuración</button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -1165,12 +64,17 @@
                 <div class="user-email" id="userEmail">email@ejemplo.com</div>
                 <span class="user-role" id="userRole">CLIENTE</span>
             </div>
-            <button class="btn-logout" onclick="logout()">🚪 Cerrar Sesión</button>
+            <button class="btn-logout" onclick="logout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar
+                Sesión</button>
         </div>
     </aside>
 
     <!-- MAIN CONTENT -->
     <main class="main-content">
+        <!-- Dentro de <main class="main-content">, justo después de abrir la etiqueta -->
+        <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Abrir menú">
+            <span class="hamburger"></span>
+        </button>
         <!-- CATÁLOGO -->
         <section id="view-catalogo" class="view-section active">
             <div class="page-header">
@@ -1178,16 +82,21 @@
                 <p class="page-subtitle">Explora nuestros productos y agrega al carrito</p>
             </div>
             <div class="top-bar">
-                <div class="search-box"><span class="search-icon">🔍</span><input type="text" class="search-input"
-                        id="searchInput" placeholder="Buscar productos..."></div>
-                <button class="btn-primary" onclick="toggleCart(true)">🛒 Carrito <span class="cart-badge"
-                        id="cartBadge">0</span></button>
+                <div class="search-box">
+                    <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Buscar productos...">
+                </div>
+                <button class="btn-primary" onclick="toggleCart(true)">
+                    <i class="fa-solid fa-cart-shopping"></i> Carrito <span class="cart-badge" id="cartBadge">0</span>
+                </button>
             </div>
-            <div class="categories-scroll" id="categoriesContainer"><button class="category-chip active"
-                    onclick="filterCategory('TODOS', this)">Todos</button></div>
+            <div class="categories-scroll" id="categoriesContainer">
+                <button class="category-chip active" onclick="filterCategory('TODOS', this)">Todos</button>
+            </div>
             <div class="products-grid" id="productsContainer">
                 <div class="loading">
-                    <div class="spinner"></div><span>Cargando productos...</span>
+                    <div class="spinner"></div>
+                    <span>Cargando productos...</span>
                 </div>
             </div>
         </section>
@@ -1241,11 +150,13 @@
                 <h1 class="page-title">Mis Direcciones</h1>
                 <p class="page-subtitle">Gestiona tus direcciones de envío</p>
             </div>
-            <button class="btn-primary" onclick="showAddressModal()" style="margin-bottom: 24px;">➕ Agregar Nueva
-                Dirección</button>
+            <button class="btn-primary" onclick="showAddressModal()" style="margin-bottom: 24px;">
+                <i class="fa-solid fa-plus"></i> Agregar Nueva Dirección
+            </button>
             <div id="addressesContainer">
                 <div class="loading">
-                    <div class="spinner"></div><span>Cargando direcciones...</span>
+                    <div class="spinner"></div>
+                    <span>Cargando direcciones...</span>
                 </div>
             </div>
         </section>
@@ -1258,31 +169,47 @@
             </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px;">
                 <div class="table-container" style="padding: 24px;">
-                    <h3 style="margin-bottom: 20px; font-size: 1.2rem;">👤 Información del Perfil</h3>
+                    <h3 style="margin-bottom: 20px; font-size: 1.2rem;"><i class="fa-solid fa-user"></i> Información del
+                        Perfil</h3>
                     <form id="profileForm" onsubmit="updateProfile(event)">
-                        <div class="form-group"><label class="form-label">Nombre Completo</label><input type="text"
-                                class="form-input" id="profileName" required></div>
-                        <div class="form-group"><label class="form-label">Correo Electrónico</label><input type="email"
-                                class="form-input" id="profileEmail" required></div>
-                        <div class="form-group"><label class="form-label">Teléfono</label><input type="tel"
-                                class="form-input" id="profilePhone"></div>
-                        <button type="submit" class="btn-primary" style="width: 100%;">💾 Guardar Cambios</button>
+                        <div class="form-group">
+                            <label class="form-label">Nombre Completo</label>
+                            <input type="text" class="form-input" id="profileName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-input" id="profileEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Teléfono</label>
+                            <input type="tel" class="form-input" id="profilePhone">
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%;"><i
+                                class="fa-solid fa-floppy-disk"></i> Guardar Cambios</button>
                     </form>
                 </div>
                 <div class="table-container" style="padding: 24px;">
-                    <h3 style="margin-bottom: 20px; font-size: 1.2rem;">🔒 Seguridad</h3>
+                    <h3 style="margin-bottom: 20px; font-size: 1.2rem;"><i class="fa-solid fa-shield-halved"></i>
+                        Seguridad</h3>
                     <form id="passwordForm" onsubmit="changePassword(event)">
-                        <div class="form-group"><label class="form-label">Nueva Contraseña</label><input type="password"
-                                class="form-input" id="newPassword" required minlength="6"></div>
-                        <div class="form-group"><label class="form-label">Confirmar Contraseña</label><input
-                                type="password" class="form-input" id="confirmPassword" required></div>
-                        <button type="submit" class="btn-primary" style="width: 100%;">🔐 Actualizar Contraseña</button>
+                        <div class="form-group">
+                            <label class="form-label">Nueva Contraseña</label>
+                            <input type="password" class="form-input" id="newPassword" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confirmar Contraseña</label>
+                            <input type="password" class="form-input" id="confirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%;"><i class="fa-solid fa-key"></i>
+                            Actualizar Contraseña</button>
                     </form>
                 </div>
                 <div class="table-container" style="padding: 24px; grid-column: 1 / -1;">
-                    <h3 style="margin-bottom: 20px; font-size: 1.2rem;">🎨 Preferencias</h3>
-                    <button class="btn-secondary" onclick="toggleTheme()" style="width: 100%; padding: 16px;">🌓 Cambiar
-                        Tema (Oscuro/Claro)</button>
+                    <h3 style="margin-bottom: 20px; font-size: 1.2rem;"><i class="fa-solid fa-sliders"></i> Preferencias
+                    </h3>
+                    <button class="btn-secondary" onclick="toggleTheme()" style="width: 100%; padding: 16px;">
+                        <i class="fa-solid fa-circle-half-stroke"></i> Cambiar Tema (Oscuro/Claro)
+                    </button>
                 </div>
             </div>
         </section>
@@ -1291,11 +218,12 @@
     <!-- CART SIDEBAR -->
     <aside class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
-            <h3>🛒 Tu Carrito</h3><button class="btn-close" onclick="toggleCart(false)">✕</button>
+            <h3><i class="fa-solid fa-cart-shopping"></i> Tu Carrito</h3>
+            <button class="btn-close" onclick="toggleCart(false)">✕</button>
         </div>
         <div class="cart-items" id="cartItems">
             <div class="empty-cart">
-                <div class="empty-cart-icon">🛒</div>
+                <div class="empty-cart-icon"><i class="fa-solid fa-cart-shopping"></i></div>
                 <p>Tu carrito está vacío</p>
             </div>
         </div>
@@ -1309,53 +237,55 @@
         </div>
     </aside>
 
-    <!-- CHECKOUT MODAL - CON MÉTODO DE ENVÍO -->
+    <!-- CHECKOUT MODAL -->
     <div class="modal-overlay" id="checkoutModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>💳 Finalizar Compra</h3><button class="btn-close" onclick="closeCheckoutModal()">✕</button>
+                <h3><i class="fa-regular fa-credit-card"></i> Finalizar Compra</h3>
+                <button class="btn-close" onclick="closeCheckoutModal()">✕</button>
             </div>
             <div class="modal-body">
                 <form id="checkoutForm" onsubmit="processOrder(event)">
-                    <div class="form-group"><label class="form-label">📍 Dirección de Envío</label><textarea
-                            class="form-textarea" id="shippingAddress" required
-                            placeholder="Ingresa tu dirección completa..."></textarea></div>
-                    <div class="form-group"><label class="form-label">📞 Teléfono de Contacto</label><input type="tel"
-                            class="form-input" id="contactPhone" required placeholder="999 999 999"></div>
-
-                    <!-- ✅ MÉTODO DE ENVÍO -->
                     <div class="form-group">
-                        <label class="form-label">🚚 Método de Envío</label>
+                        <label class="form-label"><i class="fa-solid fa-map-location-dot"></i> Dirección de
+                            Envío</label>
+                        <textarea class="form-textarea" id="shippingAddress" required
+                            placeholder="Ingresa tu dirección completa..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"><i class="fa-solid fa-phone"></i> Teléfono de Contacto</label>
+                        <input type="tel" class="form-input" id="contactPhone" required placeholder="999 999 999">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"><i class="fa-solid fa-truck-fast"></i> Método de Envío</label>
                         <select class="form-select" id="shippingMethod" required>
                             <option value="">Cargando opciones...</option>
                         </select>
                     </div>
-
                     <div class="form-group">
-                        <label class="form-label">💳 Método de Pago</label>
+                        <label class="form-label"><i class="fa-solid fa-wallet"></i> Método de Pago</label>
                         <div class="payment-methods">
                             <div class="payment-option selected" onclick="selectPaymentMethod('TARJETA', this)">
-                                <div class="payment-option-icon">💳</div>
+                                <div class="payment-option-icon"><i class="fa-regular fa-credit-card"></i></div>
                                 <div class="payment-option-name">Tarjeta</div>
                             </div>
                             <div class="payment-option" onclick="selectPaymentMethod('EFECTIVO', this)">
-                                <div class="payment-option-icon">💵</div>
+                                <div class="payment-option-icon"><i class="fa-solid fa-money-bill-wave"></i></div>
                                 <div class="payment-option-name">Efectivo</div>
                             </div>
                             <div class="payment-option" onclick="selectPaymentMethod('TRANSFERENCIA', this)">
-                                <div class="payment-option-icon">🏦</div>
+                                <div class="payment-option-icon"><i class="fa-solid fa-building-columns"></i></div>
                                 <div class="payment-option-name">Transferencia</div>
                             </div>
                             <div class="payment-option" onclick="selectPaymentMethod('PAYPAL', this)">
-                                <div class="payment-option-icon">💰</div>
+                                <div class="payment-option-icon"><i class="fa-brands fa-paypal"></i></div>
                                 <div class="payment-option-name">PayPal</div>
                             </div>
                         </div>
                         <input type="hidden" id="paymentMethod" value="TARJETA">
                     </div>
-
                     <div style="background: var(--bg-card); padding: 20px; border-radius: 12px; margin-top: 20px;">
-                        <h4 style="margin-bottom: 16px;">📋 Resumen del Pedido</h4>
+                        <h4 style="margin-bottom: 16px;"><i class="fa-solid fa-receipt"></i> Resumen del Pedido</h4>
                         <div id="checkoutSummary"></div>
                     </div>
                 </form>
@@ -1363,21 +293,23 @@
             <div class="modal-footer">
                 <button type="button" class="btn-secondary" onclick="closeCheckoutModal()">Cancelar</button>
                 <button type="submit" class="btn-primary"
-                    onclick="document.getElementById('checkoutForm').requestSubmit()" style="flex: 2;">Confirmar
-                    Pedido</button>
+                    onclick="document.getElementById('checkoutForm').requestSubmit()" style="flex: 2;">
+                    Confirmar Pedido
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- ORDER DETAIL MODAL - CON INFO DE ENVÍO -->
+    <!-- ORDER DETAIL MODAL -->
     <div class="modal-overlay" id="orderDetailModal">
         <div class="modal-content" style="max-width: 700px;">
             <div class="modal-header">
-                <h3>📦 Detalle del Pedido #<span id="orderDetailId"></span></h3><button class="btn-close"
-                    onclick="closeOrderDetailModal()">✕</button>
+                <h3><i class="fa-solid fa-box-open"></i> Detalle del Pedido #<span id="orderDetailId"></span></h3>
+                <button class="btn-close" onclick="closeOrderDetailModal()">✕</button>
             </div>
             <div class="modal-body" id="orderDetailBody"></div>
-            <div class="modal-footer"><button class="btn-secondary" onclick="closeOrderDetailModal()">Cerrar</button>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeOrderDetailModal()">Cerrar</button>
             </div>
         </div>
     </div>
@@ -1386,33 +318,44 @@
     <div class="modal-overlay" id="addressModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="addressModalTitle">📍 Agregar Dirección</h3><button class="btn-close"
-                    onclick="closeAddressModal()">✕</button>
+                <h3 id="addressModalTitle"><i class="fa-solid fa-map-pin"></i> Agregar Dirección</h3>
+                <button class="btn-close" onclick="closeAddressModal()">✕</button>
             </div>
             <div class="modal-body">
                 <form id="addressForm" onsubmit="saveAddress(event)">
-                    <div class="form-group"><label class="form-label">Calle *</label><input type="text"
-                            class="form-input" id="addressCalle" required
-                            placeholder="Av. Principal, Jr. Los Sauces..."></div>
-                    <div class="form-group"><label class="form-label">Número *</label><input type="text"
-                            class="form-input" id="addressNumero" required placeholder="123, 456-B..."></div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                        <div class="form-group"><label class="form-label">Ciudad</label><input type="text"
-                                class="form-input" id="addressCiudad" placeholder="Lima"></div>
-                        <div class="form-group"><label class="form-label">País</label><input type="text"
-                                class="form-input" id="addressPais" placeholder="Perú"></div>
+                    <div class="form-group">
+                        <label class="form-label">Calle *</label>
+                        <input type="text" class="form-input" id="addressCalle" required
+                            placeholder="Av. Principal, Jr. Los Sauces...">
                     </div>
-                    <div class="form-group"><label
-                            style="display: flex; align-items: center; gap: 10px; cursor: pointer;"><input
-                                type="checkbox" id="addressEsPrincipal" style="width: 20px; height: 20px;"><span>Marcar
-                                como dirección principal</span></label></div>
+                    <div class="form-group">
+                        <label class="form-label">Número *</label>
+                        <input type="text" class="form-input" id="addressNumero" required placeholder="123, 456-B...">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label class="form-label">Ciudad</label>
+                            <input type="text" class="form-input" id="addressCiudad" placeholder="Lima">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">País</label>
+                            <input type="text" class="form-input" id="addressPais" placeholder="Perú">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" id="addressEsPrincipal" style="width: 20px; height: 20px;">
+                            <span>Marcar como dirección principal</span>
+                        </label>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn-secondary" onclick="closeAddressModal()">Cancelar</button>
                 <button type="submit" class="btn-primary"
-                    onclick="document.getElementById('addressForm').requestSubmit()" style="flex: 2;">💾 Guardar
-                    Dirección</button>
+                    onclick="document.getElementById('addressForm').requestSubmit()" style="flex: 2;">
+                    <i class="fa-solid fa-floppy-disk"></i> Guardar Dirección
+                </button>
             </div>
         </div>
     </div>
@@ -1420,341 +363,26 @@
     <!-- TOAST -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <script>
-        // ==================== STATE ====================
-        let products = [], cart = {}, categories = [], selectedCategory = 'TODOS', orders = [], addresses = [], currentView = 'catalogo', isDarkMode = true, editingAddressId = null;
-        const token = localStorage.getItem('token'), usuarioId = localStorage.getItem('usuarioId') || '1', userEmail = localStorage.getItem('email') || 'usuario@email.com', userName = localStorage.getItem('nombre') || 'Usuario', userRole = localStorage.getItem('rol') || 'CLIENTE';
-
-        // ==================== INIT ====================
-        document.addEventListener('DOMContentLoaded', () => { initUser(); loadProducts(); loadOrders(); document.getElementById('searchInput').addEventListener('input', debounce(filterProducts, 300)); });
-        function initUser() { document.getElementById('userName').textContent = userName; document.getElementById('userEmail').textContent = userEmail; document.getElementById('userRole').textContent = userRole; document.getElementById('profileName').value = userName; document.getElementById('profileEmail').value = userEmail; }
-
-        // ==================== NAVIGATION ====================
-        function switchView(viewName) { currentView = viewName; document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active')); document.getElementById(`btn-${viewName}`)?.classList.add('active'); document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active')); document.getElementById(`view-${viewName}`).classList.add('active'); if (viewName === 'pedidos') loadOrders(); else if (viewName === 'direcciones') loadAddresses(); window.scrollTo(0, 0); }
-        function toggleCart(open) { document.getElementById('cartSidebar').classList.toggle('open', open); }
-
-        // ==================== PRODUCTS ====================
-        async function loadProducts() {
-            try {
-                console.log('🔄 Cargando productos...');
-                const response = await fetch('/api/productos', {
-                    headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
-                });
-
-                if (!response.ok) throw new Error('Error al cargar productos: ' + response.status);
-
-                const data = await response.json();
-                products = Array.isArray(data) ? data : [];
-
-                console.log('✅ Productos cargados:', products.length);
-                console.log('📋 Primer producto:', products[0]);
-
-                extractCategories();
-                renderCategories();
-                renderProducts(products);
-            } catch (error) {
-                console.error('❌ Error:', error);
-                showToast('Error', 'No se pudieron cargar los productos', 'error');
-                document.getElementById('productsContainer').innerHTML = `
-            <div class="empty-state" style="grid-column: 1/-1;">
-                <div class="empty-state-icon">📦</div>
-                <div class="empty-state-title">Error al cargar</div>
-                <p>Por favor, recarga la página</p>
-            </div>`;
-            }
-        }
-        function extractCategories() { const s = new Set(); products.forEach(p => { const c = p.categoria?.nombre || p.Categoria?.nombre; if (c) s.add(c); }); categories = Array.from(s); }
-        function renderCategories() { const c = document.getElementById('categoriesContainer'); c.innerHTML = '<button class="category-chip active" onclick="filterCategory(\'TODOS\',this)">Todos</button>'; categories.forEach(cat => { const b = document.createElement('button'); b.className = 'category-chip'; b.textContent = cat; b.onclick = () => filterCategory(cat, b); c.appendChild(b); }); }
-        function filterCategory(cat, btn) { selectedCategory = cat; document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active')); btn.classList.add('active'); filterProducts(); }
-        function filterProducts() { const q = document.getElementById('searchInput').value.toLowerCase().trim(); const f = products.filter(p => (p.nombre || '').toLowerCase().includes(q) && (selectedCategory === 'TODOS' || (p.categoria?.nombre || p.Categoria?.nombre || '') === selectedCategory)); renderProducts(f); }
-        function renderProducts(list) {
-            const c = document.getElementById('productsContainer');
-
-            if (!list || list.length === 0) {
-                c.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
-            <div class="empty-state-icon">🔍</div>
-            <div class="empty-state-title">Sin productos</div>
-            <p>No hay productos disponibles en esta categoría</p>
-        </div>`;
-                return;
-            }
-
-            c.innerHTML = list.map(p => {
-                const stock = p.stock || 0;
-                const out = stock === 0;
-
-                // ✅ DEBUG: Verificar qué llega del backend
-                console.log('📦 Producto:', p.nombre);
-                console.log('🖼️ Imagen URL:', p.imagenUrl);
-                console.log('📁 Tipo de imagenUrl:', typeof p.imagenUrl);
-
-                // ✅ CONSTRUIR URL DE IMAGEN CORRECTAMENTE
-                let imagenSrc = '';
-                if (p.imagenUrl && p.imagenUrl.trim() !== '') {
-                    // Asegurar que la URL empiece con /
-                    imagenSrc = p.imagenUrl.startsWith('/') ? p.imagenUrl : '/' + p.imagenUrl;
-                    console.log('✅ URL final:', imagenSrc);
-                }
-
-                // ✅ HTML DE IMAGEN CON FALLBACK Y DEBUG
-                const imagenHTML = imagenSrc ?
-                    `<img src="${imagenSrc}" 
-                  style="width:100%;height:100%;object-fit:cover;" 
-                  onerror="console.error('❌ No se pudo cargar:', this.src); this.parentElement.innerHTML='<div style=\\'font-size:3rem;color:var(--text-muted)\\'>📦</div>'"
-                  onload="console.log('✅ Imagen cargada:', this.src)">` :
-                    `<div style="font-size:3rem;color:var(--text-muted);display:flex;align-items:center;justify-content:center;height:100%">📦</div>`;
-
-                return `<div class="product-card">
-            <div class="product-image" style="background:var(--bg-secondary);display:flex;align-items:center;justify-content:center">
-                ${imagenHTML}
+    <!-- MODAL DE CONFIRMACIÓN GENÉRICO -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 id="confirmModalTitle">Confirmar acción</h3>
+                <button class="btn-close" onclick="closeConfirmModal()">✕</button>
             </div>
-            <div class="product-info">
-                <div class="product-category">${p.categoria?.nombre || p.Categoria?.nombre || 'General'}</div>
-                <div class="product-name" title="${p.nombre}">${p.nombre}</div>
-                <div class="product-meta">
-                    <span>SKU: ${p.sku || 'N/A'}</span>
-                    <span class="stock-badge ${stock < 10 && !out ? 'low' : ''}">${out ? 'Sin Stock' : `Stock: ${stock}`}</span>
-                </div>
-                <div class="product-price">S/. ${(p.precio || 0).toFixed(2)}</div>
-                <button class="btn-add-cart" onclick="addToCart(${p.productoId},'${p.nombre.replace(/'/g, "\\'")}',${p.precio})" ${out ? 'disabled' : ''}>
-                    ${out ? 'Sin Stock' : 'Agregar al Carrito'}
-                </button>
+            <div class="modal-body">
+                <p id="confirmModalMessage">¿Estás seguro de que deseas realizar esta acción?</p>
             </div>
-        </div>`;
-            }).join('');
-        }
-        // ==================== CART ====================
-        function addToCart(id, name, price) { if (cart[id]) cart[id].cantidad++; else cart[id] = { productoId: id, nombre: name, precio: price, cantidad: 1 }; updateCartUI(); showToast('Agregado', `${name} al carrito`, 'success'); }
-        function removeFromCart(id) { delete cart[id]; updateCartUI(); }
-        function updateQuantity(id, change) { if (cart[id]) { cart[id].cantidad += change; if (cart[id].cantidad <= 0) removeFromCart(id); else updateCartUI(); } }
-        function updateCartUI() { const items = Object.values(cart), totalItems = items.reduce((s, i) => s + i.cantidad, 0), total = items.reduce((s, i) => s + (i.precio * i.cantidad), 0); document.getElementById('cartBadge').textContent = totalItems; document.getElementById('cartSubtotal').textContent = `S/. ${total.toFixed(2)}`; document.getElementById('cartTotal').textContent = `S/. ${total.toFixed(2)}`; const list = document.getElementById('cartItems'); if (!items.length) { list.innerHTML = `<div class="empty-cart"><div class="empty-cart-icon">🛒</div><p>Tu carrito está vacío</p></div>`; return; } list.innerHTML = items.map(i => `<div class="cart-item"><div class="cart-item-image">📦</div><div class="cart-item-details"><div class="cart-item-name">${i.nombre}</div><div class="cart-item-price">S/. ${i.precio.toFixed(2)}</div><div class="quantity-controls"><button class="btn-qty" onclick="updateQuantity(${i.productoId},-1)">-</button><span>${i.cantidad}</span><button class="btn-qty" onclick="updateQuantity(${i.productoId},1)">+</button></div></div><button class="btn-remove" onclick="removeFromCart(${i.productoId})">Eliminar</button></div>`).join(''); }
-
-        // ==================== CHECKOUT ====================
-        async function showCheckoutModal() {
-            const items = Object.values(cart);
-            if (!items.length) { showToast('Carrito vacío', 'Agrega productos primero', 'warning'); return; }
-
-            // Cargar métodos de envío si no están cargados
-            const shippingSelect = document.getElementById('shippingMethod');
-            if (shippingSelect.options.length <= 1) {
-                try {
-                    const res = await fetch('/api/envios/metodos', { headers: { 'Authorization': `Bearer ${token}` } });
-                    if (res.ok) {
-                        const methods = await res.json();
-                        shippingSelect.innerHTML = '<option value="">Seleccionar envío...</option>';
-                        methods.forEach(m => {
-                            const opt = document.createElement('option');
-                            opt.value = m.metodoId;
-                            opt.textContent = `${m.nombre} (S/. ${m.costoBase?.toFixed(2) || '0.00'}) - ${m.diasEntregaMin}-${m.diasEntregaMax} días`;
-                            opt.dataset.costo = m.costoBase || 0;
-                            shippingSelect.appendChild(opt);
-                        });
-                    }
-                } catch (e) { console.error('Error cargando métodos de envío:', e); }
-            }
-
-            updateCheckoutSummary();
-            document.getElementById('checkoutModal').classList.add('active');
-        }
-
-        function closeCheckoutModal() { document.getElementById('checkoutModal').classList.remove('active'); }
-
-        function selectPaymentMethod(method, el) { document.getElementById('paymentMethod').value = method; document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected')); el.classList.add('selected'); }
-
-        function updateCheckoutSummary() {
-            const items = Object.values(cart);
-            const subtotal = items.reduce((sum, i) => sum + (i.precio * i.cantidad), 0);
-            const shippingSelect = document.getElementById('shippingMethod');
-            const selectedOption = shippingSelect.options[shippingSelect.selectedIndex];
-            const shippingCost = selectedOption && selectedOption.value ? parseFloat(selectedOption.dataset.costo) || 0 : 0;
-            const total = subtotal + shippingCost;
-
-            document.getElementById('checkoutSummary').innerHTML = `
-                <div style="margin-bottom:12px;"><strong>${items.length} producto(s)</strong></div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>Subtotal:</span><span>S/. ${subtotal.toFixed(2)}</span></div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>Envío:</span><span style="color:var(--success)">S/. ${shippingCost.toFixed(2)}</span></div>
-                <div style="display:flex;justify-content:space-between;font-size:1.2rem;font-weight:700;color:var(--primary);border-top:1px solid var(--border-color);padding-top:12px"><span>Total:</span><span>S/. ${total.toFixed(2)}</span></div>
-            `;
-            document.getElementById('cartShipping').textContent = `S/. ${shippingCost.toFixed(2)}`;
-            document.getElementById('cartTotal').textContent = `S/. ${total.toFixed(2)}`;
-        }
-
-        // Event listener para actualizar total cuando cambia el método de envío
-        document.addEventListener('DOMContentLoaded', () => {
-            const shippingSelect = document.getElementById('shippingMethod');
-            if (shippingSelect) shippingSelect.addEventListener('change', updateCheckoutSummary);
-        });
-
-        async function processOrder(event) {
-            event.preventDefault();
-
-            const items = Object.values(cart).map(item => ({
-                productoId: item.productoId,
-                cantidad: item.cantidad
-            }));
-
-            const orderData = {
-                items: items,
-                direccionEnvio: document.getElementById('shippingAddress').value,
-                telefonoContacto: document.getElementById('contactPhone').value,
-                metodoPago: document.getElementById('paymentMethod').value,  // ← ESTO
-                metodoEnvioId: document.getElementById('shippingMethod').value ?
-                    parseInt(document.getElementById('shippingMethod').value) : null
-            };
-
-            console.log('📦 Datos del pedido:', orderData);  // ← DEBUG
-            console.log('💳 Método de pago seleccionado:', orderData.metodoPago);  // ← DEBUG
-
-
-            try {
-                const res = await fetch('/api/pedidos', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, 'X-Usuario-ID': usuarioId },
-                    body: JSON.stringify(orderData)
-                });
-                if (!res.ok) { const error = await res.text(); throw new Error(error || 'Error al crear el pedido'); }
-                const result = await res.json();
-                showToast('¡Pedido creado!', `Pedido #${result.pedidoId} registrado exitosamente`, 'success');
-                cart = {}; updateCartUI(); closeCheckoutModal(); toggleCart(false); await loadProducts(); await loadOrders();
-            } catch (error) { console.error('Error:', error); showToast('Error', error.message || 'No se pudo procesar el pedido', 'error'); }
-        }
-
-        // ==================== ORDERS ====================
-        async function loadOrders() { try { const res = await fetch(`/api/pedidos/mis-pedidos?usuarioId=${usuarioId}`, { headers: { 'Authorization': `Bearer ${token}` } }); if (!res.ok) throw new Error('Error'); orders = await res.json(); renderOrders(); updateStats(); } catch (e) { console.error(e); document.getElementById('pedidosTableBody').innerHTML = `<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted)">Error al cargar pedidos</td></tr>`; } }
-        function renderOrders() {
-            const tb = document.getElementById('pedidosTableBody');
-            if (!orders.length) {
-                tb.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:40px"><div class="empty-state" style="padding:20px"><div class="empty-state-icon">📦</div><div class="empty-state-title">Sin pedidos</div><p>Aún no has realizado compras</p></div></td></tr>`;
-                return;
-            }
-
-            tb.innerHTML = orders.map(o => {
-                const cls = `status-${(o.estado || 'pendiente').toLowerCase()}`;
-                const fecha = new Date(o.creadoEn || o.fechaPedido).toLocaleString('es-PE');
-
-                // ✅ BOTÓN DE ELIMINAR (solo si está PENDIENTE)
-                const canDelete = (o.estado || '').toUpperCase() === 'PENDIENTE';
-                const deleteButton = canDelete ?
-                    `<button class="btn-remove" onclick="deleteOrder(${o.pedidoId})" style="margin-left:8px;">🗑️ Eliminar</button>` : '';
-
-                return `<tr>
-            <td class="order-id">#${o.pedidoId}</td>
-            <td>${fecha}</td>
-            <td><span class="status-badge ${cls}">${o.estado || 'PENDIENTE'}</span></td>
-            <td style="font-weight:700;color:var(--primary)">S/. ${(o.montoTotal || 0).toFixed(2)}</td>
-            <td>
-                <button class="btn-view" onclick="viewOrderDetail(${o.pedidoId})">Ver</button>
-                ${deleteButton}
-            </td>
-        </tr>`;
-            }).join('');
-        }
-        async function deleteOrder(pedidoId) {
-            if (!confirm('¿Estás seguro de eliminar este pedido? Esta acción no se puede deshacer.')) {
-                return;
-            }
-
-            try {
-                const res = await fetch(`/api/pedidos/${pedidoId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'X-Usuario-ID': usuarioId
-                    }
-                });
-
-                if (res.ok) {
-                    showToast('Eliminado', `Pedido #${pedidoId} eliminado correctamente`, 'success');
-                    await loadOrders();  // Recargar la lista
-                } else {
-                    const error = await res.json();
-                    showToast('Error', error.error || 'No se pudo eliminar el pedido', 'error');
-                }
-            } catch (err) {
-                console.error('Error:', err);
-                showToast('Error', 'Error de conexión al eliminar el pedido', 'error');
-            }
-        }
-        function updateStats() { const total = orders.length, gastado = orders.reduce((s, o) => s + (o.montoTotal || 0), 0), prom = total > 0 ? gastado / total : 0; document.getElementById('statTotalPedidos').textContent = total; document.getElementById('statTotalGastado').textContent = `S/. ${gastado.toFixed(2)}`; document.getElementById('statPromedio').textContent = `S/. ${prom.toFixed(2)}`; }
-        async function viewOrderDetail(pedidoId) { try { const res = await fetch(`/api/pedidos/${pedidoId}`, { headers: { 'Authorization': `Bearer ${token}` } }); if (!res.ok) throw new Error('Error'); const o = await res.json(); showOrderDetail(o); } catch (e) { showToast('Error', 'No se pudo cargar el detalle', 'error'); } }
-        function showOrderDetail(o) {
-            document.getElementById('orderDetailId').textContent = o.pedidoId;
-            const items = o.detalles || o.items || [], fecha = new Date(o.creadoEn || o.fechaPedido).toLocaleString('es-PE');
-
-            // ✅ ACTUALIZAR: Los items ahora tienen imagenUrl directamente
-            const itemsHTML = items.map(i => {
-                const nombreProducto = i.nombreProducto || 'Producto';
-                const imagenUrl = i.imagenUrl;  // ← Ahora está directamente en el item
-
-                // Crear HTML de imagen con fallback a emoji
-                const imagenHTML = imagenUrl && imagenUrl.trim() !== '' && imagenUrl !== 'null' ?
-                    `<img src="${imagenUrl.startsWith('/') ? imagenUrl : '/' + imagenUrl}" 
-                  style="width:60px;height:60px;object-fit:cover;border-radius:8px;"
-                  onerror="this.style.display='none'; this.parentElement.innerHTML='📦'">` :
-                    '<div style="font-size:1.8rem">📦</div>';
-
-                return `<div class="order-item">
-            <div class="order-item-image" style="display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-radius:8px;">
-                ${imagenHTML}
+            <div class="modal-footer">
+                <button class="btn-secondary" id="confirmModalCancelBtn">Cancelar</button>
+                <button class="btn-primary" id="confirmModalAcceptBtn">Aceptar</button>
             </div>
-            <div class="order-item-info">
-                <div class="order-item-name">${nombreProducto}</div>
-                <div class="order-item-meta">Cantidad: ${i.cantidad} x S/. ${(i.precioUnitario || 0).toFixed(2)}</div>
-            </div>
-            <div class="order-item-price">S/. ${(i.subtotal || 0).toFixed(2)}</div>
-        </div>`;
-            }).join('');
-
-            // ✅ INFORMACIÓN DE ENVÍO
-            const shippingInfo = o.metodoEnvioNombre || o.numeroTracking || o.estadoEnvio ? `
-        <div class="shipping-info">
-            <div class="shipping-info-title">🚚 Información de Envío</div>
-            ${o.metodoEnvioNombre ? `<div class="shipping-info-row"><span>Método:</span><strong>${o.metodoEnvioNombre}</strong></div>` : ''}
-            ${o.costoEnvio ? `<div class="shipping-info-row"><span>Costo:</span><strong>S/. ${parseFloat(o.costoEnvio).toFixed(2)}</strong></div>` : ''}
-            ${o.numeroTracking ? `<div class="shipping-info-row"><span>Tracking:</span><strong class="tracking-code">${o.numeroTracking}</strong></div>` : ''}
-            ${o.estadoEnvio ? `<div class="shipping-info-row"><span>Estado:</span><strong>${o.estadoEnvio}</strong></div>` : ''}
-            ${o.fechaEstimadaEntrega ? `<div class="shipping-info-row"><span>Entrega estimada:</span><strong>${new Date(o.fechaEstimadaEntrega).toLocaleDateString('es-PE')}</strong></div>` : ''}
-        </div>` : '';
-
-            document.getElementById('orderDetailBody').innerHTML = `
-        <div style="margin-bottom:24px">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
-                <div><div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:4px">Fecha</div><div style="font-weight:600">${fecha}</div></div>
-                <div><div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:4px">Estado</div><span class="status-badge status-${(o.estado || 'PENDIENTE').toLowerCase()}">${o.estado || 'PENDIENTE'}</span></div>
-            </div>
-            <div style="margin-bottom:20px"><div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:4px">Dirección</div><div style="font-weight:600">${o.direccionEnvio || 'No especificada'}</div></div>
-            <div style="margin-bottom:20px"><div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:4px">Teléfono</div><div style="font-weight:600">${o.telefonoContacto || 'No especificado'}</div></div>
-            <div style="margin-bottom:20px"><div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:4px">Método de Pago</div><div style="font-weight:600">${o.metodoPago || 'No especificado'}</div></div>
-            ${shippingInfo}
         </div>
-        <h4 style="margin-bottom:16px">Productos</h4><div class="order-items-list">${itemsHTML}</div>
-        <div style="border-top:2px solid var(--border-color);padding-top:20px;margin-top:20px">
-            <div style="display:flex;justify-content:space-between;font-size:1.3rem;font-weight:700;color:var(--primary)"><span>Total:</span><span>S/. ${(o.montoTotal || 0).toFixed(2)}</span></div>
-        </div>`;
-            document.getElementById('orderDetailModal').classList.add('active');
-        }
-        function closeOrderDetailModal() { document.getElementById('orderDetailModal').classList.remove('active'); }
+    </div>
 
-        // ==================== ADDRESSES ====================
-        async function loadAddresses() { try { const res = await fetch(`/api/direcciones?usuarioId=${usuarioId}`, { headers: { 'Authorization': `Bearer ${token}` } }); addresses = res.ok ? await res.json() : []; renderAddresses(); } catch (e) { console.error(e); addresses = []; renderAddresses(); } }
-        function renderAddresses() { const c = document.getElementById('addressesContainer'); if (!addresses.length) { c.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📍</div><div class="empty-state-title">Sin direcciones</div><p>Agrega tu primera dirección</p></div>`; return; } c.innerHTML = addresses.map(a => `<div class="table-container" style="padding:20px;margin-bottom:16px"><div style="display:flex;justify-content:space-between;align-items:start"><div style="flex:1"><div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div style="font-weight:600;font-size:1.1rem">📍 ${a.calle || 'Calle'} #${a.numero || ''}</div>${a.esPrincipal ? '<span class="status-badge status-procesando">Principal</span>' : ''}</div><div style="color:var(--text-muted);margin-bottom:6px">${a.ciudad || ''}${a.ciudad && a.pais ? ', ' : ''}${a.pais || ''}</div><div style="color:var(--text-muted);font-size:0.9rem">ID: #${a.direccionId}</div></div><div style="display:flex;gap:8px"><button class="btn-view" onclick="editAddress(${a.direccionId})">Editar</button><button class="btn-remove" onclick="deleteAddress(${a.direccionId})">Eliminar</button></div></div></div>`).join(''); }
-        function showAddressModal() { editingAddressId = null; document.getElementById('addressForm')?.reset(); document.getElementById('addressModalTitle').textContent = 'Agregar Dirección'; document.getElementById('addressModal')?.classList.add('active'); }
-        function editAddress(id) { const a = addresses.find(x => x.direccionId === id); if (!a) return; editingAddressId = id; document.getElementById('addressCalle').value = a.calle || ''; document.getElementById('addressNumero').value = a.numero || ''; document.getElementById('addressCiudad').value = a.ciudad || ''; document.getElementById('addressPais').value = a.pais || ''; document.getElementById('addressEsPrincipal').checked = a.esPrincipal || false; document.getElementById('addressModalTitle').textContent = 'Editar Dirección'; document.getElementById('addressModal')?.classList.add('active'); }
-        async function saveAddress(e) { e.preventDefault(); const data = { usuarioId: parseInt(usuarioId), calle: document.getElementById('addressCalle').value, numero: document.getElementById('addressNumero').value, ciudad: document.getElementById('addressCiudad').value, pais: document.getElementById('addressPais').value, esPrincipal: document.getElementById('addressEsPrincipal').checked }; try { let url = '/api/direcciones', method = 'POST'; if (editingAddressId) { url = `/api/direcciones/${editingAddressId}`; method = 'PUT'; } const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(data) }); if (!res.ok) throw new Error('Error'); await loadAddresses(); closeAddressModal(); showToast(editingAddressId ? 'Actualizada' : 'Agregada', 'Dirección guardada', 'success'); } catch (err) { console.error(err); showToast('Error', 'No se pudo guardar', 'error'); } }
-        async function deleteAddress(id) { if (!confirm('¿Eliminar esta dirección?')) return; try { const res = await fetch(`/api/direcciones/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } }); if (!res.ok) throw new Error('Error'); await loadAddresses(); showToast('Eliminada', 'Dirección eliminada', 'success'); } catch (err) { console.error(err); showToast('Error', 'No se pudo eliminar', 'error'); } }
-        function closeAddressModal() { document.getElementById('addressModal')?.classList.remove('active'); editingAddressId = null; }
 
-        // ==================== SETTINGS ====================
-        async function updateProfile(e) { e.preventDefault(); const data = { nombre: document.getElementById('profileName').value, email: document.getElementById('profileEmail').value, telefono: document.getElementById('profilePhone').value }; try { const res = await fetch(`/api/usuarios/${usuarioId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(data) }); if (!res.ok) throw new Error('Error'); localStorage.setItem('nombre', data.nombre); localStorage.setItem('email', data.email); document.getElementById('userName').textContent = data.nombre; document.getElementById('userEmail').textContent = data.email; showToast('Actualizado', 'Perfil guardado', 'success'); } catch (err) { showToast('Error', 'No se pudo actualizar', 'error'); } }
-        async function changePassword(e) { e.preventDefault(); const np = document.getElementById('newPassword').value, cp = document.getElementById('confirmPassword').value; if (np !== cp) { showToast('Error', 'Las contraseñas no coinciden', 'error'); return; } if (np.length < 6) { showToast('Error', 'Mínimo 6 caracteres', 'error'); return; } try { const res = await fetch('/api/auth/update-password', { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ usuarioId: parseInt(usuarioId), newPassword: np }) }); if (!res.ok) throw new Error('Error'); document.getElementById('passwordForm').reset(); showToast('Actualizada', 'Contraseña cambiada', 'success'); } catch (err) { showToast('Error', 'No se pudo actualizar', 'error'); } }
-        function toggleTheme() { const r = document.documentElement; if (isDarkMode) { r.style.setProperty('--bg-body', '#f1f5f9'); r.style.setProperty('--bg-sidebar', '#ffffff'); r.style.setProperty('--bg-card', '#ffffff'); r.style.setProperty('--border-color', '#cbd5e1'); r.style.setProperty('--text-main', '#0f172a'); r.style.setProperty('--text-muted', '#64748b'); showToast('Modo claro', 'Interfaz actualizada', 'success'); } else { r.style.setProperty('--bg-body', '#0b0f19'); r.style.setProperty('--bg-sidebar', '#111827'); r.style.setProperty('--bg-card', '#1f2937'); r.style.setProperty('--border-color', '#374151'); r.style.setProperty('--text-main', '#f3f4f6'); r.style.setProperty('--text-muted', '#9ca3af'); showToast('Modo oscuro', 'Interfaz actualizada', 'success'); } isDarkMode = !isDarkMode; }
-        function logout() { if (confirm('¿Cerrar sesión?')) { localStorage.clear(); window.location.replace('/index.html'); } }
-
-        // ==================== UTILS ====================
-        function showToast(title, msg, type = 'info') { const c = document.getElementById('toastContainer'), t = document.createElement('div'); t.className = `toast ${type}`; t.innerHTML = `<div class="toast-title">${title}</div><div class="toast-message">${msg}</div>`; c.appendChild(t); setTimeout(() => { t.style.animation = 'slideIn 0.3s ease reverse'; setTimeout(() => t.remove(), 300); }, 3500); }
-        function debounce(fn, wait) { let t; return function (...args) { clearTimeout(t); t = setTimeout(() => fn.apply(this, args), wait); }; }
-        document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('active'); }));
-    </script>
+    <!-- Scripts -->
+    <script src="dashboard.js"></script>
 </body>
 
 </html>

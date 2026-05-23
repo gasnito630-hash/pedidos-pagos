@@ -5,85 +5,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Pedidos y Pagos</title>
+    <!-- Fuente Inter para look profesional -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="estilos.css">
 </head>
 
 <body>
 
-    <div class="login-wrapper">
-        <!-- PANEL IZQUIERDO: BRANDING -->
-        <div class="login-branding">
-            <div class="branding-logo">📦</div>
-            <h1 class="branding-title">Pedidos & Pagos</h1>
-            <p class="branding-text">Sistema académico de gestión de pedidos.</p>
-            <div class="branding-features">
-                <div class="feature-item">🔒 Conexión segura</div>
-                <div class="feature-item">⚡ Gestión en tiempo real</div>
-                <div class="feature-item">📊 Reportes integrados</div>
+    <!-- ✅ CONTAINER PRINCIPAL (class: auth-container) -->
+    <div class="auth-container">
+
+        <!-- ✅ PANEL IZQUIERDO: IMAGEN/BRANDING (class: auth-visual) -->
+        <div class="auth-visual">
+            <div class="visual-content brand-logo">
+                <span></span> Pedidos & Pagos
+            </div>
+
+            <div class="visual-content">
+                <h1 class="quote-text">Sistema académico de gestión de pedidos.</h1>
+            </div>
+
+            <div class="visual-content branding-features">
+                <div class="feature-item">Conexión segura</div>
+                <div class="feature-item">Gestión en tiempo real</div>
+                <div class="feature-item">Reportes integrados</div>
             </div>
         </div>
 
-        <!-- PANEL DERECHO: FORMULARIO -->
-        <div class="login-form-container">
+        <!-- ✅ PANEL DERECHO: FORMULARIO (class: auth-form-wrapper) -->
+        <div class="auth-form-wrapper">
+
             <div class="form-header">
-                <h2>Bienvenido 👋</h2>
+                <h1>Bienvenido 👋</h1>
                 <p>Ingresa tus credenciales para continuar</p>
             </div>
 
             <form id="loginForm">
-                <!-- Email -->
-                <div class="form-group">
+
+                <!-- ✅ Email (class: input-group + input-field) -->
+                <div class="input-group">
                     <label for="email">Correo electrónico</label>
-                    <div class="input-wrapper">
-                        <input type="email" id="email" placeholder="admin@pedidos.com" required autocomplete="email">
-                        <span class="input-icon">📧</span>
-                    </div>
+                    <input type="email" id="email" class="input-field" placeholder="admin@pedidos.com" required
+                        autocomplete="email">
                 </div>
 
-                <!-- Contraseña -->
-                <div class="form-group">
+                <!-- ✅ Contraseña (con icono derecho) -->
+                <div class="input-group">
                     <label for="password">Contraseña</label>
-                    <div class="input-wrapper">
-                        <input type="password" id="password" placeholder="••••••••" required minlength="6"
-                            autocomplete="current-password">
-                        <span class="input-icon">🔑</span>
-                        <button type="button" class="toggle-password" id="togglePassword">👁️</button>
+                    <div style="position: relative;">
+                        <input type="password" id="password" class="input-field" placeholder="••••••••" required
+                            minlength="6" autocomplete="current-password">
+                        <button type="button" class="input-icon-right" id="togglePassword">
+                            <!-- Icono inicial: Ojo Abierto -->
+                            <svg xmlns="http://w3.org" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Opciones -->
-                <div class="form-options">
+
+                <!-- ✅ Opciones (Remember + Forgot) -->
+                <div class="form-actions">
                     <label class="remember-me">
                         <input type="checkbox" id="remember">
-                        <span class="checkmark"></span>
                         Recordarme
                     </label>
-                    <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+                    <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
                 </div>
 
-                <!-- Botón Login -->
-                <button type="submit" class="btn-login">Iniciar Sesión</button>
+                <!-- ✅ Botón Login (class: btn-primary) -->
+                <button type="submit" class="btn-primary">Iniciar Sesión</button>
 
+                <!-- ✅ Divider -->
                 <div class="divider">
                     <span class="divider-line"></span>
-                    <span class="divider-text">o continúa con</span>
+                    <span>o continúa con</span>
                     <span class="divider-line"></span>
                 </div>
 
-                <!-- Botones Sociales (Decorativos) -->
-                <div class="social-buttons">
-                    <button type="button" class="btn-social"><span>🔵</span> Google</button>
-                    <button type="button" class="btn-social"><span>⚫</span> GitHub</button>
+                <!-- ✅ Botones Sociales (class: social-login + btn-social) -->
+                <div class="social-login">
+                    <!-- Botón de Google -->
+                    <button type="button" class="btn-social">
+                        <span>
+                            <svg xmlns="http://w3.org" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
+                                style="vertical-align: middle; margin-right: 5px;">
+                                <path
+                                    d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0c2.158 0 3.978.792 5.396 2.1l-2.149 2.149C10.24 3.24 9.24 2.8 8 2.8c-2.87 0-5.19 2.42-5.19 5.2s2.32 5.2 5.19 5.2c3.31 0 4.54-2.38 4.75-3.64H8V6.558h7.545z" />
+                            </svg>
+                        </span> Google
+                    </button>
+
+                    <!-- Botón de GitHub -->
+                    <button type="button" class="btn-social">
+                        <span>
+                            <svg xmlns="http://w3.org" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
+                                style="vertical-align: middle; margin-right: 5px;">
+                                <path
+                                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                            </svg>
+                        </span> GitHub
+                    </button>
+
                 </div>
             </form>
 
-            <div class="register-link">
+            <!-- ✅ Footer Link (class: footer-link) -->
+            <div class="footer-link">
                 ¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a>
             </div>
         </div>
     </div>
 
-    <!-- NOTIFICACIÓN TOAST (Alerta Bonita) -->
+    <!-- ✅ NOTIFICACIÓN TOAST -->
     <div id="toast" class="toast">
         <div class="toast-icon">✅</div>
         <div class="toast-content">
@@ -93,6 +132,7 @@
     </div>
 
     <script src="login.js"></script>
+
 </body>
 
 </html>
