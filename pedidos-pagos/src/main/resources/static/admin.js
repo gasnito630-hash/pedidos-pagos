@@ -204,7 +204,7 @@ async function deleteUser(id) {
 
             // Contenido visual
             card.innerHTML = `
-                <div style="font-size: 48px; color: #dc3545; margin-bottom: 12px;">⚠️</div>
+                <div style="font-size: 48px; color: #dc3545; margin-bottom: 12px;"></div>
                 <h3 style="margin: 0 0 8px 0; font-size: 20px; color: #212529;">¿Eliminar este usuario permanentemente?</h3>
                 <p style="margin: 0 0 24px 0; font-size: 14px; color: #6c757d; line-height: 1.5;">
                     Esta acción borrará todos sus datos y no se puede deshacer.
@@ -272,7 +272,7 @@ function showProductModal(productId = null) {
             const catId = p.categoria?.categoriaId || p.categoriaId || null;
             updateCategoryDropdown(catId);
 
-            // ✅ CARGAR IMAGEN EXISTENTE
+            //  CARGAR IMAGEN EXISTENTE
             const imageUrl = p.imagenUrl || '';
             document.getElementById('productImageUrl').value = imageUrl;
 
@@ -364,21 +364,21 @@ async function saveProduct(e) {
             body: JSON.stringify(data)
         });
 
-        console.log('📥 Response status:', res.status);
+        console.log('Response status:', res.status);
 
         if (res.ok) {
             const result = await res.json();
-            console.log('✅ Producto guardado:', result);
+            console.log('Producto guardado:', result);
             closeProductModal();
             await loadProducts();
             showToast(id ? 'Producto actualizado' : 'Producto creado', 'success');
         } else {
             const errorText = await res.text();
-            console.error('❌ Error del servidor:', errorText);
+            console.error('Error del servidor:', errorText);
             showToast('Error al guardar: ' + errorText, 'error');
         }
     } catch (err) {
-        console.error('❌ Error de red:', err);
+        console.error('Error de red:', err);
         showToast('Error de conexión', 'error');
     }
 }
@@ -421,7 +421,7 @@ async function deleteProduct(id) {
 
             // Contenido visual
             card.innerHTML = `
-                <div style="font-size: 48px; color: #dc3545; margin-bottom: 12px;">⚠️</div>
+                <div style="font-size: 48px; color: #dc3545; margin-bottom: 12px;"></div>
                 <h3 style="margin: 0 0 8px 0; font-size: 20px; color: #212529;">¿Eliminar este producto permanentemente?</h3>
                 <p style="margin: 0 0 24px 0; font-size: 14px; color: #6c757d; line-height: 1.5;">
                     Esta acción quitará el artículo del inventario y no se puede deshacer.
@@ -511,7 +511,7 @@ function renderReporte(data) {
 function showToast(msg, type = 'info') {
     const c = document.getElementById('toastContainer'), t = document.createElement('div');
     t.className = `toast ${type}`;
-    t.innerHTML = `<div class="toast-title">${type === 'success' ? '✅ Éxito' : type === 'error' ? '❌ Error' : '⚠️ Advertencia'}</div><div class="toast-message">${msg}</div>`;
+    t.innerHTML = `<div class="toast-title">${type === 'success' ? 'Éxito' : type === 'error' ? 'Error' : 'Advertencia'}</div><div class="toast-message">${msg}</div>`;
     c.appendChild(t);
     setTimeout(() => { t.style.animation = 'slideIn 0.3s ease reverse'; setTimeout(() => t.remove(), 300); }, 3500);
 }
