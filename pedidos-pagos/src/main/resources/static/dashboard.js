@@ -72,7 +72,7 @@ function toggleCart(open) {
 // ==================== PRODUCTS ====================
 async function loadProducts() {
     try {
-        console.log('🔄 Cargando productos...');
+        console.log('Cargando productos...');
         const response = await fetch('/api/productos', {
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -85,13 +85,13 @@ async function loadProducts() {
         const data = await response.json();
         products = Array.isArray(data) ? data : [];
 
-        console.log('✅ Productos cargados:', products.length);
+        console.log('Productos cargados:', products.length);
 
         extractCategories();
         renderCategories();
         renderProducts(products);
     } catch (error) {
-        console.error('❌ Error:', error);
+        console.error('Error:', error);
         showToast('Error', 'No se pudieron cargar los productos', 'error');
         document.getElementById('productsContainer').innerHTML = `
             <div class="empty-state" style="grid-column: 1/-1;">
@@ -145,7 +145,7 @@ function renderProducts(list) {
 
     if (!list || list.length === 0) {
         c.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
-            <div class="empty-state-icon">🔍</div>
+            <div class="empty-state-icon"></div>
             <div class="empty-state-title">Sin productos</div>
             <p>No hay productos disponibles en esta categoría</p>
         </div>`;
@@ -332,7 +332,7 @@ async function processOrder(event) {
             parseInt(document.getElementById('shippingMethod').value) : null
     };
 
-    console.log('📦 Datos del pedido:', orderData);
+    console.log('Datos del pedido:', orderData);
 
     try {
         const res = await fetch('/api/pedidos', {
@@ -404,7 +404,7 @@ function renderOrders() {
         const fecha = new Date(o.creadoEn || o.fechaPedido).toLocaleString('es-PE');
         const canDelete = (o.estado || '').toUpperCase() === 'PENDIENTE';
         const deleteButton = canDelete ?
-            `<button class="btn-remove" onclick="deleteOrder(${o.pedidoId})" style="margin-left:8px;">🗑️ Eliminar</button>` : '';
+            `<button class="btn-remove" onclick="deleteOrder(${o.pedidoId})" style="margin-left:8px;">Eliminar</button>` : '';
 
         return `<tr>
             <td class="order-id">#${o.pedidoId}</td>
@@ -420,10 +420,74 @@ function renderOrders() {
 }
 
 async function deleteOrder(pedidoId) {
-    if (!confirm('¿Estás seguro de eliminar este pedido? Esta acción no se puede deshacer.')) {
-        return;
-    }
+    // 1. Crear la promesa para esperar la respuesta del usuario
+    const confirmar = () => {
+        return new Promise((resolve) => {
+            // Estilos del contenedor del modal (Fondo oscuro)
+            const backdrop = document.createElement('div');
+            backdrop.style.position = 'fixed';
+            backdrop.style.top = '0';
+            backdrop.style.left = '0';
+            backdrop.style.width = '100vw';
+            backdrop.style.height = '100vh';
+            backdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            backdrop.style.backdropFilter = 'blur(4px)';
+            backdrop.style.display = 'flex';
+            backdrop.style.justifyContent = 'center';
+            backdrop.style.alignItems = 'center';
+            backdrop.style.zIndex = '99999';
+            backdrop.style.fontFamily = 'system-ui, -apple-system, sans-serif';
 
+            // Estilos de la tarjeta del modal
+            const card = document.createElement('div');
+            card.style.backgroundColor = '#000000';
+            card.style.padding = '24px';
+            card.style.borderRadius = '12px';
+            card.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
+            card.style.maxWidth = '400px';
+            card.style.width = '90%';
+            card.style.textAlign = 'center';
+            card.style.animation = 'scaleUp 0.2s ease-out';
+
+            // Inyectar animación CSS simple
+            const style = document.createElement('style');
+            style.textContent = `@keyframes scaleUp { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }`;
+            document.head.appendChild(style);
+
+            // Contenido del modal
+            card.innerHTML = `
+                <div style="font-size: 48px; color: #dc3545; margin-bottom: 12px;">⚠️</div>
+                <h3 style="margin: 0 0 8px 0; font-size: 20px; color: #ffffff;">¿Estás seguro?</h3>
+                <p style="margin: 0 0 24px 0; font-size: 14px; color: #6c757d; line-height: 1.5;">
+                    Esta acción eliminará el pedido de forma permanente y no se puede deshacer.
+                </p>
+                <div style="display: flex; justify-content: center; gap: 12px;">
+                    <button id="btn-cancelar" style="padding: 10px 18px; border: 1px solid #dee2e6; background: #fff; color: #495057; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px;">Cancelar</button>
+                    <button id="btn-confirmar" style="padding: 10px 18px; border: none; background: #dc3545; color: #fff; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px;">Sí, eliminar</button>
+                </div>
+            `;
+
+            backdrop.appendChild(card);
+            document.body.appendChild(backdrop);
+
+            // Manejadores de eventos internos
+            card.querySelector('#btn-cancelar').addEventListener('click', () => {
+                backdrop.remove();
+                resolve(false);
+            });
+
+            card.querySelector('#btn-confirmar').addEventListener('click', () => {
+                backdrop.remove();
+                resolve(true);
+            });
+        });
+    };
+
+    // 2. Ejecutar la confirmación visual
+    const userConfirmed = await confirmar();
+    if (!userConfirmed) return;
+
+    // 3. Flujo original de eliminación
     try {
         const res = await fetch(`/api/pedidos/${pedidoId}`, {
             method: 'DELETE',
@@ -445,6 +509,7 @@ async function deleteOrder(pedidoId) {
         showToast('Error', 'Error de conexión al eliminar el pedido', 'error');
     }
 }
+
 
 function updateStats() {
     const total = orders.length;
@@ -641,8 +706,74 @@ async function saveAddress(e) {
 }
 
 async function deleteAddress(id) {
-    if (!confirm('¿Eliminar esta dirección?')) return;
+    // 1. Crear el modal estético autónomo
+    const confirmar = () => {
+        return new Promise((resolve) => {
+            // Fondo oscuro difuminado
+            const backdrop = document.createElement('div');
+            backdrop.style.position = 'fixed';
+            backdrop.style.top = '0';
+            backdrop.style.left = '0';
+            backdrop.style.width = '100vw';
+            backdrop.style.height = '100vh';
+            backdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            backdrop.style.backdropFilter = 'blur(4px)';
+            backdrop.style.display = 'flex';
+            backdrop.style.justifyContent = 'center';
+            backdrop.style.alignItems = 'center';
+            backdrop.style.zIndex = '99999';
+            backdrop.style.fontFamily = 'system-ui, -apple-system, sans-serif';
 
+            // Tarjeta del modal
+            const card = document.createElement('div');
+            card.style.backgroundColor = '#fff';
+            card.style.padding = '24px';
+            card.style.borderRadius = '12px';
+            card.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
+            card.style.maxWidth = '400px';
+            card.style.width = '90%';
+            card.style.textAlign = 'center';
+            card.style.animation = 'scaleUp 0.2s ease-out';
+
+            // Animación CSS integrada
+            const style = document.createElement('style');
+            style.textContent = `@keyframes scaleUp { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }`;
+            document.head.appendChild(style);
+
+            // Contenido visual
+            card.innerHTML = `
+                <div style="font-size: 48px; color: #dc3545; margin-bottom: 12px;">⚠️</div>
+                <h3 style="margin: 0 0 8px 0; font-size: 20px; color: #212529;">¿Eliminar esta dirección?</h3>
+                <p style="margin: 0 0 24px 0; font-size: 14px; color: #6c757d; line-height: 1.5;">
+                    Esta acción no se puede deshacer.
+                </p>
+                <div style="display: flex; justify-content: center; gap: 12px;">
+                    <button id="btn-cancelar" style="padding: 10px 18px; border: 1px solid #dee2e6; background: #fff; color: #495057; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px;">Cancelar</button>
+                    <button id="btn-confirmar" style="padding: 10px 18px; border: none; background: #dc3545; color: #fff; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px;">Sí, eliminar</button>
+                </div>
+            `;
+
+            backdrop.appendChild(card);
+            document.body.appendChild(backdrop);
+
+            // Captura de clics
+            card.querySelector('#btn-cancelar').addEventListener('click', () => {
+                backdrop.remove();
+                resolve(false);
+            });
+
+            card.querySelector('#btn-confirmar').addEventListener('click', () => {
+                backdrop.remove();
+                resolve(true);
+            });
+        });
+    };
+
+    // 2. Esperar la respuesta del usuario
+    const userConfirmed = await confirmar();
+    if (!userConfirmed) return;
+
+    // 3. Flujo original de eliminación
     try {
         const res = await fetch(`/api/direcciones/${id}`, {
             method: 'DELETE',
@@ -656,6 +787,7 @@ async function deleteAddress(id) {
         showToast('Error', 'No se pudo eliminar', 'error');
     }
 }
+
 
 function closeAddressModal() {
     document.getElementById('addressModal')?.classList.remove('active');
@@ -910,4 +1042,19 @@ document.addEventListener('DOMContentLoaded', () => {
         menuToggle.classList.add('active');
     }
 });
+
+// dashboard.js
+function showProductsSkeleton(count = 8) {
+    const container = document.getElementById('productsContainer');
+    container.innerHTML = Array(count).fill(`
+        <div class="product-card">
+            <div class="product-image skeleton"></div>
+            <div class="product-info">
+                <div class="skeleton" style="height:16px;margin-bottom:8px"></div>
+                <div class="skeleton" style="height:12px;width:60%"></div>
+            </div>
+        </div>
+    `).join('');
+}
+
 

@@ -99,29 +99,42 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Función del Toast mejorada
+    // ==================== TOAST NOTIFICATION ====================
     function showToast(msg, isError = false) {
-        const t = document.getElementById('toast');
-        if (!t) {
-            alert(msg);
+        const toast = document.getElementById('toast');
+        if (!toast) {
+            alert(msg); // Fallback si no hay toast
             return;
         }
 
-        const messageSpan = t.querySelector('.toast-message');
-        if (messageSpan) {
-            messageSpan.textContent = msg;
+        const titleEl = toast.querySelector('.toast-title');
+        const messageEl = toast.querySelector('.toast-message');
+        const iconEl = toast.querySelector('.toast-icon svg');
+
+        // Actualizar contenido
+        if (titleEl) titleEl.textContent = isError ? 'Error' : '¡Éxito!';
+        if (messageEl) messageEl.textContent = msg;
+        
+        // Actualizar icono y color según tipo
+        if (iconEl) {
+            iconEl.innerHTML = isError 
+                ? '<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />' // X
+                : '<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />'; // Check
         }
+        
+        toast.style.borderLeftColor = isError 
+            ? 'var(--text-error, #ef4444)' 
+            : 'var(--text-success, #22c55e)';
 
-        if (isError) {
-            t.style.borderLeftColor = 'var(--color-error, #ff4d4d)';
-        } else {
-            t.style.borderLeftColor = 'var(--color-success, #2ecc71)';
-        }
+        // Mostrar toast con animación
+        toast.classList.add('show');
 
-        t.classList.add('show');
-
+        // Ocultar después de 3 segundos
         setTimeout(() => {
-            t.classList.remove('show');
+            toast.classList.remove('show');
         }, 3000);
     }
+
+    // Exponer showToast globalmente por si se necesita desde otros scripts
+    window.showToast = showToast;
 });

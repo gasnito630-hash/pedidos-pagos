@@ -62,9 +62,79 @@ function switchView(viewName) {
     }
 }
 
-function logout() {
-    if (confirm('¿Cerrar sesión de administrador?')) { localStorage.clear(); window.location.href = '/index.html'; }
+async function logout() {
+    // 1. Crear el modal estético autónomo
+    const confirmar = () => {
+        return new Promise((resolve) => {
+            // Fondo oscuro difuminado
+            const backdrop = document.createElement('div');
+            backdrop.style.position = 'fixed';
+            backdrop.style.top = '0';
+            backdrop.style.left = '0';
+            backdrop.style.width = '100vw';
+            backdrop.style.height = '100vh';
+            backdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            backdrop.style.backdropFilter = 'blur(4px)';
+            backdrop.style.display = 'flex';
+            backdrop.style.justifyContent = 'center';
+            backdrop.style.alignItems = 'center';
+            backdrop.style.zIndex = '99999';
+            backdrop.style.fontFamily = 'system-ui, -apple-system, sans-serif';
+
+            // Tarjeta del modal
+            const card = document.createElement('div');
+            card.style.backgroundColor = '#fff';
+            card.style.padding = '24px';
+            card.style.borderRadius = '12px';
+            card.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
+            card.style.maxWidth = '400px';
+            card.style.width = '90%';
+            card.style.textAlign = 'center';
+            card.style.animation = 'scaleUp 0.2s ease-out';
+
+            // Animación CSS integrada
+            const style = document.createElement('style');
+            style.textContent = `@keyframes scaleUp { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }`;
+            document.head.appendChild(style);
+
+            // Contenido visual (Cambiado a un icono azul de información/salida)
+            card.innerHTML = `
+                <div style="font-size: 48px; color: #0d6efd; margin-bottom: 12px;"></div>
+                <h3 style="margin: 0 0 8px 0; font-size: 20px; color: #212529;">¿Cerrar sesión de administrador?</h3>
+                <p style="margin: 0 0 24px 0; font-size: 14px; color: #6c757d; line-height: 1.5;">
+                    Tendrás que volver a ingresar tus credenciales para acceder al panel.
+                </p>
+                <div style="display: flex; justify-content: center; gap: 12px;">
+                    <button id="btn-cancelar" style="padding: 10px 18px; border: 1px solid #dee2e6; background: #fff; color: #495057; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px;">Cancelar</button>
+                    <button id="btn-confirmar" style="padding: 10px 18px; border: none; background: #0d6efd; color: #fff; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px;">Cerrar sesión</button>
+                </div>
+            `;
+
+            backdrop.appendChild(card);
+            document.body.appendChild(backdrop);
+
+            // Captura de clics
+            card.querySelector('#btn-cancelar').addEventListener('click', () => {
+                backdrop.remove();
+                resolve(false);
+            });
+
+            card.querySelector('#btn-confirmar').addEventListener('click', () => {
+                backdrop.remove();
+                resolve(true);
+            });
+        });
+    };
+
+    // 2. Esperar la respuesta del usuario (Nota que agregamos async a la función principal)
+    const userConfirmed = await confirmar();
+    if (!userConfirmed) return;
+
+    // 3. Flujo original de cierre de sesión
+    localStorage.clear();
+    window.location.href = '/index.html';
 }
+
 
 // ==================== DASHBOARD ====================
 async function loadDashboardStats() {
@@ -93,18 +163,101 @@ async function loadDashboardStats() {
 
 // ==================== USUARIOS ====================
 async function loadUsers() { try { const res = await fetch('/api/admin/users', { headers: { 'Authorization': `Bearer ${token}` } }); users = res.ok ? await res.json() : []; renderUsers(); } catch (e) { document.getElementById('usersTableBody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px">Error al cargar usuarios</td></tr>'; } }
-function renderUsers() { const tb = document.getElementById('usersTableBody'); if (!users.length) { tb.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px">No hay usuarios registrados</td></tr>'; return; } tb.innerHTML = users.map(u => `<tr><td>#${u.usuarioId}</td><td>${u.nombre}</td><td>${u.email}</td><td><span class="badge ${u.rol === 'ADMIN' ? 'badge-warning' : 'badge-info'}">${u.rol}</span></td><td><span class="badge ${u.activo ? 'badge-success' : 'badge-danger'}">${u.activo ? 'Activo' : 'Inactivo'}</span></td><td><button class="btn-action edit" onclick="editUser(${u.usuarioId})">✏️ Editar</button><button class="btn-action delete" onclick="deleteUser(${u.usuarioId})">🗑️ Eliminar</button></td></tr>`).join(''); }
-function showUserModal(userId = null) { document.getElementById('userModalTitle').textContent = userId ? '✏️ Editar Usuario' : '➕ Nuevo Usuario'; document.getElementById('userId').value = userId || ''; document.getElementById('passwordGroup').style.display = userId ? 'none' : 'block'; if (userId) { const u = users.find(x => x.usuarioId === userId); if (u) { document.getElementById('userName').value = u.nombre || ''; document.getElementById('userEmail').value = u.email || ''; document.getElementById('userRole').value = u.rol || 'CLIENTE'; } } else { document.getElementById('userForm').reset(); } document.getElementById('userModal').classList.add('active'); }
+function renderUsers() { const tb = document.getElementById('usersTableBody'); if (!users.length) { tb.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:80px">No hay usuarios registrados</td></tr>'; return; } tb.innerHTML = users.map(u => `<tr><td>#${u.usuarioId}</td><td>${u.nombre}</td><td>${u.email}</td><td><span class="badge ${u.rol === 'ADMIN' ? 'badge-warning' : 'badge-info'}">${u.rol}</span></td><td><span class="badge ${u.activo ? 'badge-success' : 'badge-danger'}">${u.activo ? 'Activo' : 'Inactivo'}</span></td><td><button class="btn-action edit" onclick="editUser(${u.usuarioId})">Editar</button><button class="btn-action delete" onclick="deleteUser(${u.usuarioId})">Eliminar</button></td></tr>`).join(''); }
+function showUserModal(userId = null) { document.getElementById('userModalTitle').textContent = userId ? 'Editar Usuario' : 'Nuevo Usuario'; document.getElementById('userId').value = userId || ''; document.getElementById('passwordGroup').style.display = userId ? 'none' : 'block'; if (userId) { const u = users.find(x => x.usuarioId === userId); if (u) { document.getElementById('userName').value = u.nombre || ''; document.getElementById('userEmail').value = u.email || ''; document.getElementById('userRole').value = u.rol || 'CLIENTE'; } } else { document.getElementById('userForm').reset(); } document.getElementById('userModal').classList.add('active'); }
 function closeUserModal() { document.getElementById('userModal').classList.remove('active'); document.getElementById('userForm').reset(); }
 async function saveUser(e) { e.preventDefault(); const userId = document.getElementById('userId'), userName = document.getElementById('userName'), userEmail = document.getElementById('userEmail'), userRole = document.getElementById('userRole'), userPassword = document.getElementById('userPassword'); if (!userName || !userEmail || !userRole) { console.error('❌ ERROR: Elementos del formulario no existen'); alert('Error interno: Formulario incompleto'); return; } const id = userId.value, data = { nombre: userName.value, email: userEmail.value, rol: userRole.value, password: userPassword.value }; if (!token) { console.error('❌ ERROR: No hay token'); alert('Error: Sesión expirada. Inicia sesión nuevamente.'); return; } try { const url = id ? `/api/admin/users/${id}` : '/api/admin/users', method = id ? 'PUT' : 'POST', res = await fetch(url, { method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(data) }); if (res.ok) { closeUserModal(); await loadUsers(); showToast(id ? 'Usuario actualizado' : 'Usuario creado', 'success'); } else { const responseText = await res.text(); let errorMsg = `Error ${res.status}`; try { const errorJson = JSON.parse(responseText); errorMsg = errorJson.error || errorJson.message || errorMsg; } catch (e) { errorMsg = responseText.substring(0, 100) || errorMsg; } showToast(errorMsg, 'error'); } } catch (err) { console.error('❌ ERROR de red:', err); showToast(`Error de conexión: ${err.message}`, 'error'); } }
-async function deleteUser(id) { if (!confirm('¿Eliminar este usuario permanentemente?')) return; try { const res = await fetch(`/api/admin/users/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } }); if (res.ok) { await loadUsers(); showToast('Usuario eliminado', 'success'); } else { showToast('Error al eliminar', 'error'); } } catch (err) { showToast('Error de conexión', 'error'); } }
+async function deleteUser(id) {
+    // 1. Crear el modal estético autónomo
+    const confirmar = () => {
+        return new Promise((resolve) => {
+            // Fondo oscuro difuminado
+            const backdrop = document.createElement('div');
+            backdrop.style.position = 'fixed';
+            backdrop.style.top = '0';
+            backdrop.style.left = '0';
+            backdrop.style.width = '100vw';
+            backdrop.style.height = '100vh';
+            backdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            backdrop.style.backdropFilter = 'blur(4px)';
+            backdrop.style.display = 'flex';
+            backdrop.style.justifyContent = 'center';
+            backdrop.style.alignItems = 'center';
+            backdrop.style.zIndex = '99999';
+            backdrop.style.fontFamily = 'system-ui, -apple-system, sans-serif';
+
+            // Tarjeta del modal
+            const card = document.createElement('div');
+            card.style.backgroundColor = '#fff';
+            card.style.padding = '24px';
+            card.style.borderRadius = '12px';
+            card.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
+            card.style.maxWidth = '400px';
+            card.style.width = '90%';
+            card.style.textAlign = 'center';
+            card.style.animation = 'scaleUp 0.2s ease-out';
+
+            // Animación CSS integrada
+            const style = document.createElement('style');
+            style.textContent = `@keyframes scaleUp { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }`;
+            document.head.appendChild(style);
+
+            // Contenido visual
+            card.innerHTML = `
+                <div style="font-size: 48px; color: #dc3545; margin-bottom: 12px;">⚠️</div>
+                <h3 style="margin: 0 0 8px 0; font-size: 20px; color: #212529;">¿Eliminar este usuario permanentemente?</h3>
+                <p style="margin: 0 0 24px 0; font-size: 14px; color: #6c757d; line-height: 1.5;">
+                    Esta acción borrará todos sus datos y no se puede deshacer.
+                </p>
+                <div style="display: flex; justify-content: center; gap: 12px;">
+                    <button id="btn-cancelar" style="padding: 10px 18px; border: 1px solid #dee2e6; background: #fff; color: #495057; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px;">Cancelar</button>
+                    <button id="btn-confirmar" style="padding: 10px 18px; border: none; background: #dc3545; color: #fff; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px;">Sí, eliminar</button>
+                </div>
+            `;
+
+            backdrop.appendChild(card);
+            document.body.appendChild(backdrop);
+
+            // Captura de clics
+            card.querySelector('#btn-cancelar').addEventListener('click', () => {
+                backdrop.remove();
+                resolve(false);
+            });
+
+            card.querySelector('#btn-confirmar').addEventListener('click', () => {
+                backdrop.remove();
+                resolve(true);
+            });
+        });
+    };
+
+    // 2. Esperar la respuesta del usuario
+    const userConfirmed = await confirmar();
+    if (!userConfirmed) return;
+
+    // 3. Flujo original de eliminación
+    try {
+        const res = await fetch(`/api/admin/users/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+            await loadUsers();
+            showToast('Usuario eliminado', 'success');
+        } else {
+            showToast('Error al eliminar', 'error');
+        }
+    } catch (err) {
+        showToast('Error de conexión', 'error');
+    }
+}
 function editUser(id) { showUserModal(id); }
 
 // ==================== PRODUCTOS ====================
 async function loadProducts() { try { const res = await fetch('/api/productos', { headers: { 'Authorization': `Bearer ${token}` } }); products = res.ok ? await res.json() : []; renderProducts(); } catch (e) { document.getElementById('productsTableBody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px">Error al cargar productos</td></tr>'; } }
-function renderProducts() { const tb = document.getElementById('productsTableBody'); if (!products.length) { tb.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px">No hay productos</td></tr>'; return; } tb.innerHTML = products.map(p => { const catName = p.categoria?.nombre || p.Categoria?.nombre || 'General'; const imagenHTML = p.imagenUrl ? `<img src="${p.imagenUrl}" style="width:40px;height:40px;border-radius:6px;object-fit:cover;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>📦</text></svg>'">` : '<span style="font-size:1.5rem">📦</span>'; return `<tr><td>#${p.productoId}</td><td><div style="display:flex;align-items:center;gap:12px">${imagenHTML}<div><strong>${p.nombre}</strong><br><small style="color:var(--text-muted)">SKU: ${p.sku}</small></div></div></td><td><span class="badge badge-primary">${catName}</span></td><td style="font-weight:600;color:var(--primary)">S/. ${(p.precio || 0).toFixed(2)}</td><td><span class="badge ${p.stock < 10 ? 'badge-warning' : 'badge-success'}">${p.stock}</span></td><td><button class="btn-action edit" onclick="editProduct(${p.productoId})">✏️ Editar</button><button class="btn-action delete" onclick="deleteProduct(${p.productoId})">🗑️ Eliminar</button></td></tr>`; }).join(''); }
+function renderProducts() { const tb = document.getElementById('productsTableBody'); if (!products.length) { tb.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px">No hay productos</td></tr>'; return; } tb.innerHTML = products.map(p => { const catName = p.categoria?.nombre || p.Categoria?.nombre || 'General'; const imagenHTML = p.imagenUrl ? `<img src="${p.imagenUrl}" style="width:40px;height:40px;border-radius:6px;object-fit:cover;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>📦</text></svg>'">` : '<span style="font-size:1.5rem">📦</span>'; return `<tr><td>#${p.productoId}</td><td><div style="display:flex;align-items:center;gap:12px">${imagenHTML}<div><strong>${p.nombre}</strong><br><small style="color:var(--text-muted)">SKU: ${p.sku}</small></div></div></td><td><span class="badge badge-primary">${catName}</span></td><td style="font-weight:600;color:var(--primary)">S/. ${(p.precio || 0).toFixed(2)}</td><td><span class="badge ${p.stock < 10 ? 'badge-warning' : 'badge-success'}">${p.stock}</span></td><td><button class="btn-action edit" onclick="editProduct(${p.productoId})">Editar</button><button class="btn-action delete" onclick="deleteProduct(${p.productoId})">Eliminar</button></td></tr>`; }).join(''); }
 function showProductModal(productId = null) {
-    document.getElementById('productModalTitle').textContent = productId ? '✏️ Editar Producto' : '➕ Nuevo Producto';
+    document.getElementById('productModalTitle').textContent = productId ? 'Editar Producto' : 'Nuevo Producto';
     document.getElementById('productId').value = productId || '';
 
     if (productId) {
@@ -126,7 +279,7 @@ function showProductModal(productId = null) {
             const preview = document.getElementById('imagePreview');
             if (imageUrl) {
                 preview.innerHTML = `<img src="${imageUrl}" style="width:100%;height:100%;object-fit:cover;">`;
-                console.log('✅ Imagen cargada:', imageUrl);
+                console.log('Imagen cargada:', imageUrl);
             } else {
                 preview.innerHTML = '<span class="image-preview-placeholder">📷</span>';
             }
@@ -231,12 +384,95 @@ async function saveProduct(e) {
 }
 
 
-async function deleteProduct(id) { if (!confirm('¿Eliminar este producto permanentemente?')) return; try { const res = await fetch(`/api/admin/products/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } }); if (res.ok) { await loadProducts(); showToast('Producto eliminado', 'success'); } else { showToast('Error al eliminar', 'error'); } } catch (err) { showToast('Error de conexión', 'error'); } }
+async function deleteProduct(id) {
+    // 1. Crear el modal estético autónomo
+    const confirmar = () => {
+        return new Promise((resolve) => {
+            // Fondo oscuro difuminado
+            const backdrop = document.createElement('div');
+            backdrop.style.position = 'fixed';
+            backdrop.style.top = '0';
+            backdrop.style.left = '0';
+            backdrop.style.width = '100vw';
+            backdrop.style.height = '100vh';
+            backdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            backdrop.style.backdropFilter = 'blur(4px)';
+            backdrop.style.display = 'flex';
+            backdrop.style.justifyContent = 'center';
+            backdrop.style.alignItems = 'center';
+            backdrop.style.zIndex = '99999';
+            backdrop.style.fontFamily = 'system-ui, -apple-system, sans-serif';
+
+            // Tarjeta del modal
+            const card = document.createElement('div');
+            card.style.backgroundColor = '#fff';
+            card.style.padding = '24px';
+            card.style.borderRadius = '12px';
+            card.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
+            card.style.maxWidth = '400px';
+            card.style.width = '90%';
+            card.style.textAlign = 'center';
+            card.style.animation = 'scaleUp 0.2s ease-out';
+
+            // Animación CSS integrada
+            const style = document.createElement('style');
+            style.textContent = `@keyframes scaleUp { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }`;
+            document.head.appendChild(style);
+
+            // Contenido visual
+            card.innerHTML = `
+                <div style="font-size: 48px; color: #dc3545; margin-bottom: 12px;">⚠️</div>
+                <h3 style="margin: 0 0 8px 0; font-size: 20px; color: #212529;">¿Eliminar este producto permanentemente?</h3>
+                <p style="margin: 0 0 24px 0; font-size: 14px; color: #6c757d; line-height: 1.5;">
+                    Esta acción quitará el artículo del inventario y no se puede deshacer.
+                </p>
+                <div style="display: flex; justify-content: center; gap: 12px;">
+                    <button id="btn-cancelar" style="padding: 10px 18px; border: 1px solid #dee2e6; background: #fff; color: #495057; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px;">Cancelar</button>
+                    <button id="btn-confirmar" style="padding: 10px 18px; border: none; background: #dc3545; color: #fff; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px;">Sí, eliminar</button>
+                </div>
+            `;
+
+            backdrop.appendChild(card);
+            document.body.appendChild(backdrop);
+
+            // Captura de clics
+            card.querySelector('#btn-cancelar').addEventListener('click', () => {
+                backdrop.remove();
+                resolve(false);
+            });
+
+            card.querySelector('#btn-confirmar').addEventListener('click', () => {
+                backdrop.remove();
+                resolve(true);
+            });
+        });
+    };
+
+    // 2. Esperar la respuesta del usuario
+    const userConfirmed = await confirmar();
+    if (!userConfirmed) return;
+
+    // 3. Flujo original de eliminación
+    try {
+        const res = await fetch(`/api/admin/products/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+            await loadProducts();
+            showToast('Producto eliminado', 'success');
+        } else {
+            showToast('Error al eliminar', 'error');
+        }
+    } catch (err) {
+        showToast('Error de conexión', 'error');
+    }
+}
 function editProduct(id) { showProductModal(id); }
 
 // ==================== PEDIDOS ====================
 async function loadOrders() { try { const res = await fetch('/api/admin/orders', { headers: { 'Authorization': `Bearer ${token}` } }); orders = res.ok ? await res.json() : []; renderOrders(); } catch (e) { document.getElementById('ordersTableBody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px">Error al cargar pedidos</td></tr>'; } }
-function renderOrders() { const tb = document.getElementById('ordersTableBody'); if (!orders.length) { tb.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px">No hay pedidos</td></tr>'; return; } tb.innerHTML = orders.map(o => { const statusClass = { 'PENDIENTE': 'badge-warning', 'PROCESANDO': 'badge-info', 'ENVIADO': 'badge-info', 'COMPLETADO': 'badge-success', 'CANCELADO': 'badge-danger' }[o.estado] || 'badge-warning'; return `<tr><td><strong>#${o.pedidoId}</strong></td><td>Usuario #${o.usuarioId}</td><td>${new Date(o.creadoEn || o.fechaPedido).toLocaleDateString()}</td><td><span class="badge ${statusClass}">${o.estado}</span></td><td style="font-weight:600;color:var(--primary)">S/. ${(o.montoTotal || 0).toFixed(2)}</td><td><button class="btn-action edit" onclick="showOrderStatusModal(${o.pedidoId}, '${o.estado}')">🔄 Actualizar Estado</button></td></tr>`; }).join(''); }
+function renderOrders() { const tb = document.getElementById('ordersTableBody'); if (!orders.length) { tb.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px">No hay pedidos</td></tr>'; return; } tb.innerHTML = orders.map(o => { const statusClass = { 'PENDIENTE': 'badge-warning', 'PROCESANDO': 'badge-info', 'ENVIADO': 'badge-info', 'COMPLETADO': 'badge-success', 'CANCELADO': 'badge-danger' }[o.estado] || 'badge-warning'; return `<tr><td><strong>#${o.pedidoId}</strong></td><td>Usuario #${o.usuarioId}</td><td>${new Date(o.creadoEn || o.fechaPedido).toLocaleDateString()}</td><td><span class="badge ${statusClass}">${o.estado}</span></td><td style="font-weight:600;color:var(--primary)">S/. ${(o.montoTotal || 0).toFixed(2)}</td><td><button class="btn-action edit" onclick="showOrderStatusModal(${o.pedidoId}, '${o.estado}')">Actualizar Estado</button></td></tr>`; }).join(''); }
 function showOrderStatusModal(orderId, currentStatus) { document.getElementById('orderStatusId').value = orderId; document.getElementById('orderStatus').value = currentStatus; document.getElementById('orderStatusModal').classList.add('active'); }
 function closeOrderStatusModal() { document.getElementById('orderStatusModal').classList.remove('active'); }
 async function updateOrderStatus() { const orderId = document.getElementById('orderStatusId').value, newStatus = document.getElementById('orderStatus').value.toUpperCase(); if (!orderId || !newStatus) { showToast('Completa todos los campos', 'warning'); return; } try { const res = await fetch(`/api/admin/orders/${orderId}/status`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ estado: newStatus }) }); if (res.ok) { closeOrderStatusModal(); await loadOrders(); await loadDashboardStats(); showToast(`Pedido #${orderId} actualizado a "${newStatus}"`, 'success'); } else { const errorData = await res.json().catch(() => ({})); showToast(errorData.error || 'Error al actualizar estado', 'error'); } } catch (err) { showToast('Error de conexión', 'error'); } }
@@ -279,3 +515,48 @@ function showToast(msg, type = 'info') {
     c.appendChild(t);
     setTimeout(() => { t.style.animation = 'slideIn 0.3s ease reverse'; setTimeout(() => t.remove(), 300); }, 3500);
 }
+
+// ==================== THEME TOGGLE ====================
+
+// Verificar tema guardado o preferencia del sistema
+function getPreferredTheme() {
+    const saved = localStorage.getItem('admin-theme');
+    if (saved) return saved;
+
+    // Preferencia del sistema
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+// Aplicar tema
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('admin-theme', theme);
+}
+
+// Toggle de tema
+function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'light' ? 'dark' : 'light';
+    applyTheme(next);
+
+    // Toast de confirmación
+    showToast(
+        next === 'dark' ? 'Modo oscuro' : 'Modo claro',
+        'Tema actualizado',
+        'success'
+    );
+}
+
+// Inicializar tema al cargar
+document.addEventListener('DOMContentLoaded', () => {
+    applyTheme(getPreferredTheme());
+
+    // Escuchar cambios en preferencia del sistema
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        if (!localStorage.getItem('admin-theme')) {
+            applyTheme(e.matches ? 'dark' : 'light');
+        }
+    });
+
+});
+
