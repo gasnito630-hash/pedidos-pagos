@@ -380,6 +380,46 @@
         </div>
     </div>
 
+    <!-- 🤖 CHATBOT WIDGET -->
+    <div class="chatbot-widget" id="chatbot">
+        <button class="chatbot-toggle" id="chatbotToggle" aria-label="Abrir chat de ayuda">
+            <span class="chat-icon">💬</span>
+        </button>
+
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <div class="chatbot-header-info">
+                    <div class="chatbot-avatar">🤖</div>
+                    <div>
+                        <h4>Asistente Virtual</h4>
+                        <span class="chatbot-status">● En línea</span>
+                    </div>
+                </div>
+                <button class="chatbot-close" id="chatbotClose" aria-label="Cerrar chat">✕</button>
+            </div>
+
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot">
+                    ¡Hola! 👋 Soy el asistente de <strong>Pedidos & Pagos</strong>. ¿En qué puedo ayudarte hoy?
+                </div>
+            </div>
+
+            <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                <span></span><span></span><span></span>
+            </div>
+
+            <div class="chatbot-input-area">
+                <input type="text" id="chatbotInput" placeholder="Escribe tu pregunta..." autocomplete="off">
+                <button id="chatbotSend" aria-label="Enviar mensaje">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Scripts -->
     <script src="dashboard.js"></script>

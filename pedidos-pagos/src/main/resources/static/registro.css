@@ -31,15 +31,18 @@ body {
     font-family: var(--font-family);
     background: var(--bg-body);
     color: var(--text-main);
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
 }
 
 /* ================= LAYOUT SPLIT (login-wrapper) ================= */
 .login-wrapper {
     display: flex;
     width: 100%;
-    height: 100%;
+    min-height: 100vh;
 }
 
 /* Lado Izquierdo: Imagen/Branding (login-branding) */
@@ -52,7 +55,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* Centrado para el registro */
     align-items: flex-start;
     padding: 4rem;
     color: white;
@@ -66,7 +68,6 @@ body {
     z-index: 1;
 }
 
-/* Forzar que los textos del bloque queden por encima del filtro morado */
 .branding-logo,
 .branding-title,
 .branding-text {
@@ -87,7 +88,8 @@ body {
 }
 
 .branding-title {
-    font-size: 3rem;
+    font-size: clamp(2rem, 4vw, 3rem);
+    /* Tamaño fluido adaptable */
     font-weight: 700;
     line-height: 1.2;
     text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
@@ -112,7 +114,6 @@ body {
     position: relative;
 }
 
-/* Efecto de luz sutil en la esquina superior del panel */
 .login-form-container::before {
     content: '';
     position: absolute;
@@ -132,7 +133,8 @@ body {
 }
 
 .form-header h2 {
-    font-size: 2.25rem;
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    /* Fluido para títulos */
     font-weight: 700;
     margin-bottom: 0.5rem;
     background: linear-gradient(135deg, var(--text-main) 0%, var(--primary) 100%);
@@ -173,7 +175,6 @@ body {
 .input-wrapper input {
     width: 100%;
     padding: 1rem 3rem 1rem 1.25rem;
-    /* Espacio extra a la derecha para el emoji */
     background: var(--bg-input);
     border: 2px solid var(--border-color);
     border-radius: var(--radius);
@@ -194,7 +195,6 @@ body {
     opacity: 0.6;
 }
 
-/* Iconos Emoji alineados limpiamente a la derecha */
 .input-icon {
     position: absolute;
     right: 1.25rem;
@@ -202,7 +202,6 @@ body {
     transform: translateY(-50%);
     font-size: 1.1rem;
     pointer-events: none;
-    /* Evita que interfiera con los clics */
     opacity: 0.7;
 }
 
@@ -248,7 +247,6 @@ body {
     transform: translateY(0);
 }
 
-/* ================= ENLACE AL LOGIN ================= */
 .register-link {
     text-align: center;
     margin-top: 2rem;
@@ -290,4 +288,76 @@ body {
 
 .toast.show {
     transform: translateY(0);
+}
+
+/* =======================================================
+   MEDIA QUERIES - RESPONSIVE DESIGN
+   ======================================================= */
+
+/* Tablets y pantallas medianas (Menos de 1024px) */
+@media (max-width: 1024px) {
+    .login-branding {
+        padding: 3rem;
+    }
+
+    .login-form-container {
+        padding: 3rem;
+        max-width: 50%;
+    }
+}
+
+/* Dispositivos Móviles (Menos de 768px) */
+@media (max-width: 768px) {
+    body {
+        background: var(--bg-panel);
+        /* Cambia el fondo general al del panel en móviles */
+    }
+
+    .login-wrapper {
+        flex-direction: column;
+        /* Apila los paneles verticalmente */
+        min-height: 100vh;
+    }
+
+    /* Ocultamos o minimizamos el panel izquierdo en móviles para priorizar el formulario */
+    .login-branding {
+        flex: none;
+        height: 180px;
+        /* Altura pequeña solo para mostrar el logo */
+        padding: 2rem;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .branding-logo {
+        margin-bottom: 0;
+        font-size: 1.5rem;
+    }
+
+    .branding-title,
+    .branding-text {
+        display: none;
+        /* Esconde los textos largos en pantallas móviles */
+    }
+
+    /* Contenedor del formulario ocupa toda la pantalla restante */
+    .login-form-container {
+        flex: 1;
+        max-width: 100%;
+        padding: 2.5rem 1.5rem;
+        box-shadow: none;
+    }
+
+    .form-header {
+        margin-bottom: 1.75rem;
+        text-align: center;
+    }
+
+    .toast {
+        bottom: 1rem;
+        right: 1rem;
+        left: 1rem;
+        justify-content: center;
+    }
 }

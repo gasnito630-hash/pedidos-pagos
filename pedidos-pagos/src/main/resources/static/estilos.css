@@ -385,7 +385,7 @@ body {
 }
 
 /* ================= RESPONSIVE ================= */
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
     .auth-visual {
         display: none;
     }
@@ -396,14 +396,14 @@ body {
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 580px) {
     body {
         overflow: auto;
     }
 
     .auth-form-wrapper {
         padding: 2rem 1.5rem;
-        min-height: 100vh;
+        min-height: 120vh;
     }
 
     .form-header h1 {
@@ -423,7 +423,8 @@ body {
 .toast {
     position: fixed;
     top: 20px;
-    right: -400px; /* Oculto por defecto */
+    right: -400px;
+    /* Oculto por defecto */
     background: var(--bg-panel, #1e293b);
     border-left: 4px solid var(--primary, #6366f1);
     border-radius: 10px;
@@ -439,7 +440,8 @@ body {
 }
 
 .toast.show {
-    right: 20px; /* Visible */
+    right: 20px;
+    /* Visible */
 }
 
 .toast-icon {

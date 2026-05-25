@@ -1058,3 +1058,129 @@ function showProductsSkeleton(count = 8) {
 }
 
 
+// ==================== CHATBOT ====================
+document.addEventListener('DOMContentLoaded', () => {
+    const chatbotToggle = document.getElementById('chatbotToggle');
+    const chatbotWindow = document.getElementById('chatbotWindow');
+    const chatbotClose = document.getElementById('chatbotClose');
+    const chatbotMessages = document.getElementById('chatbotMessages');
+    const chatbotInput = document.getElementById('chatbotInput');
+    const chatbotSend = document.getElementById('chatbotSend');
+    const typingIndicator = document.getElementById('typingIndicator');
+
+    // 📚 Base de conocimiento del bot (FAQ)
+    const faqData = {
+        'hola': '¡Hola! 👋 Bienvenido a Pedidos & Pagos. ¿En qué puedo ayudarte?',
+        'buenos dias': '¡Buenos días! ☀️ ¿En qué puedo asistirte hoy?',
+        'buenas tardes': '¡Buenas tardes! 🌤️ ¿Qué necesitas?',
+        'pedido': '📦 Puedes ver el estado de tus pedidos en <strong>"Mis Pedidos"</strong>. Allí encontrarás historial, tracking y opciones de cancelación.',
+        'envio': '🚚 Tiempos de envío:\n• Estándar: 5-7 días\n• Express: 2-3 días\n• Prioritario: 24-48h\n• Same Day: Mismo día (zonas seleccionadas)',
+        'devolucion': '🔄 Tienes <strong>30 días</strong> para solicitar devolución. Ve a "Mis Pedidos" → Selecciona pedido → "Solicitar devolución".',
+        'pago': '💳 Métodos aceptados:\n• Tarjeta crédito/débito\n• PayPal\n• Transferencia bancaria\n• Efectivo contra entrega',
+        'rastreo': '🔍 Para rastrear: Ve a "Mis Pedidos" → Click en "Ver" → Busca el número de tracking. También te llegará por email.',
+        'contacto': '📞 Contacto directo:\n• Email: soporte@pedidos.com\n• Tel: (01) 123-4567\n• Horario: Lun-Vie 9am-6pm',
+        'cuenta': '👤 Gestión de cuenta en <strong>"Configuración"</strong>. Puedes cambiar contraseña, email, teléfono y direcciones de envío.',
+        'stock': '📊 Stock en tiempo real. Si dice "Sin Stock", el producto no está disponible temporalmente. Puedes activar alertas de reposición.',
+        'categoria': '🏷️ Filtra por categorías desde el catálogo. Haz clic en los chips superiores (Alimentos, Tecnología, etc.)',
+        'precio': '💰 Todos los precios están en Soles (S/.). Usa los filtros de precio para buscar en tu rango.',
+        'descuento': '🎟️ Actualmente no hay cupones activos. Suscríbete al newsletter para recibir promociones exclusivas.',
+        'factura': '🧾 Las facturas se generan automáticamente. Ve a "Mis Pedidos" → "Ver" → "Descargar comprobante".',
+        'ayuda': 'Puedo ayudarte con:\n📦 Estado de pedidos\n🚚 Información de envíos\n💳 Métodos de pago\n🔄 Devoluciones\n👤 Gestión de cuenta\nEscribe tu consulta y te respondo al instante.',
+        'gracias': '¡De nada! 😊 Estoy aquí si necesitas algo más. ¡Que tengas excelente día!',
+        'adios': '¡Hasta luego! 👋 Gracias por confiar en Pedidos & Pagos.',
+        'problema': 'Lamento que tengas inconvenientes. Por favor describe tu problema y te guiaré paso a paso. Si es urgente, contacta a soporte@pedidos.com',
+        'error': 'Si ves un error técnico, intenta:\n1. Recargar la página (Ctrl+F5)\n2. Limpiar caché del navegador\n3. Contactar soporte si persiste.'
+    };
+
+    // 🔄 Toggle Chat
+    function toggleChat() {
+        chatbotWindow.classList.toggle('active');
+        if (chatbotWindow.classList.contains('active')) {
+            chatbotInput.focus();
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+    }
+
+    chatbotToggle.addEventListener('click', toggleChat);
+    chatbotClose.addEventListener('click', toggleChat);
+
+    // 📤 Enviar Mensaje
+    function sendMessage() {
+        const text = chatbotInput.value.trim();
+        if (!text) return;
+
+        addMessage(text, 'user');
+        chatbotInput.value = '';
+        showTyping();
+
+        // Simular delay de respuesta realista
+        setTimeout(() => {
+            hideTyping();
+            const response = getBotResponse(text);
+            addMessage(response, 'bot');
+        }, 600 + Math.random() * 800);
+    }
+
+    // 💬 Agregar Mensaje al Chat
+    function addMessage(text, sender) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${sender}`;
+        // Permitir saltos de línea y negritas
+        msgDiv.innerHTML = text.replace(/\n/g, '<br>');
+        chatbotMessages.appendChild(msgDiv);
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
+
+    // ⌨️ Indicador de "Escribiendo..."
+    function showTyping() {
+        typingIndicator.style.display = 'block';
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
+
+    function hideTyping() {
+        typingIndicator.style.display = 'none';
+    }
+
+    // 🤖 Lógica de Respuestas del Bot
+    function getBotResponse(input) {
+        const lower = input.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Normaliza acentos
+
+        // Búsqueda por palabras clave
+        for (let key in faqData) {
+            if (lower.includes(key)) {
+                return faqData[key];
+            }
+        }
+
+        // Fallbacks inteligentes
+        const fallbacks = [
+            'Disculpa, no entendí tu consulta. ¿Podrías reformularla? 😊',
+            'No tengo información específica sobre eso. Te recomiendo escribir "ayuda" para ver qué puedo hacer.',
+            'Estoy aprendiendo nuevas respuestas. Mientras tanto, contacta a soporte@pedidos.com 📧',
+            'No estoy seguro de entender. Prueba con palabras como: pedido, envio, pago, devolucion, cuenta.'
+        ];
+        return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+    }
+
+    // 🎯 Event Listeners
+    chatbotSend.addEventListener('click', sendMessage);
+
+    chatbotInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+
+    // Cerrar al hacer click fuera
+    document.addEventListener('click', (e) => {
+        if (!chatbotWindow.contains(e.target) && !chatbotToggle.contains(e.target)) {
+            chatbotWindow.classList.remove('active');
+        }
+    });
+
+    // Atajo de teclado: Ctrl+Shift+C para abrir/cerrar
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+            e.preventDefault();
+            toggleChat();
+        }
+    });
+});
