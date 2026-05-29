@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Pedidos y Pagos</title>
+
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div>
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <svg class="sidebar-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <span>Admin</span>Panel
+                </div>
+                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Cambiar tema">
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="nav-section">
+                <div class="nav-section-title">Principal</div>
+                <ul class="nav-list">
+                    <li class="nav-item active" id="btn-dashboard">
+                        <button onclick="switchView('dashboard')">
+                            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="14" width="7" height="7"></rect>
+                                <rect x="3" y="14" width="7" height="7"></rect>
+                            </svg>
+                            Dashboard
+                        </button>
+                    </li>
+                    <li class="nav-item" id="btn-users">
+                        <button onclick="switchView('users')">
+                            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                            Usuarios
+                        </button>
+                    </li>
+                    <li class="nav-item" id="btn-products">
+                        <button onclick="switchView('products')">
+                            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                                </path>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                            </svg>
+                            Productos
+                        </button>
+                    </li>
+                    <li class="nav-item" id="btn-orders">
+                        <button onclick="switchView('orders')">
+                            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                            Pedidos
+                        </button>
+                    </li>
+                    <!-- ✅ NUEVO: Categorías -->
+                    <li class="nav-item" id="btn-categorias">
+                        <button onclick="switchView('categorias')">
+                            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
+                                </path>
+                            </svg>
+                            Categorías
+                        </button>
+                    </li>
+                    <!-- ✅ NUEVO: Métodos de Envío -->
+                    <li class="nav-item" id="btn-envios">
+                        <button onclick="switchView('envios')">
+                            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="1" y="3" width="15" height="13"></rect>
+                                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                            </svg>
+                            Envíos
+                        </button>
+                    </li>
+                    <!-- ✅ NUEVO: PAGOS -->
+                    <!-- Agrega este ítem en el sidebar, después de Reportes -->
+                    <li class="nav-item" id="btn-pagos">
+                        <button onclick="switchView('pagos')">
+                            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                <line x1="1" y1="10" x2="23" y2="10"></line>
+                            </svg>
+                            Pagos
+                        </button>
+                    </li>
+                    <li class="nav-item" id="btn-reportes">
+                        <button onclick="switchView('reportes')">
+                            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="20" x2="18" y2="10"></line>
+                                <line x1="12" y1="20" x2="12" y2="4"></line>
+                                <line x1="6" y1="20" x2="6" y2="14"></line>
+                            </svg>
+                            Reportes
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar" id="userAvatar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" id="adminName">Administrador</div>
+                    <div class="user-email" id="adminEmail">admin@pedidos.com</div>
+                    <span class="user-role" id="adminRole">ADMIN</span>
+                </div>
+            </div>
+            <button class="btn-logout" onclick="logout()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                Cerrar Sesión
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <!-- DASHBOARD -->
+        <section id="view-dashboard" class="view-section active">
+            <div class="page-header">
+                <h1 class="page-title">Panel de Control</h1>
+                <p class="page-subtitle">Resumen general del sistema en tiempo real</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card success">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Total Usuarios</div>
+                            <div class="stat-value" id="statUsers">0</div>
+                        </div>
+                        <div class="stat-icon users">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-change positive">↑ 12% este mes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Productos Activos</div>
+                            <div class="stat-value" id="statProducts">0</div>
+                        </div>
+                        <div class="stat-icon products">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path
+                                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                                </path>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-change neutral">Sin cambios</div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Pedidos Hoy</div>
+                            <div class="stat-value" id="statOrders">0</div>
+                        </div>
+                        <div class="stat-icon orders">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-change positive">↑ 5 nuevos</div>
+                </div>
+                <div class="stat-card danger">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Ventas Totales</div>
+                            <div class="stat-value" id="statSales">S/. 0</div>
+                        </div>
+                        <div class="stat-icon sales">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-change positive">↑ 23% vs mes anterior</div>
+                </div>
+            </div>
+            <div class="table-container">
+                <div class="table-header">
+                    <h3 class="table-title">Actividad Reciente</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Usuario</th>
+                            <th>Acción</th>
+                            <th>Detalle</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activityTableBody">
+                        <tr>
+                            <td colspan="4" class="loading">
+                                <div class="spinner"></div><span>Cargando actividad...</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- USERS -->
+        <section id="view-users" class="view-section">
+            <div class="page-header">
+                <h1 class="page-title">Gestión de Usuarios</h1>
+                <p class="page-subtitle">Administra los usuarios y permisos del sistema</p>
+            </div>
+            <div class="table-container">
+                <div class="table-header">
+                    <h3 class="table-title">Lista de Usuarios</h3>
+                    <div class="table-actions">
+                        <div class="search-box" style="margin-right:12px">
+                            <input type="text" class="form-input" id="searchUsers"
+                                placeholder="Buscar por nombre, email o ID..."
+                                oninput="debounceSearch('users', this.value)" style="width:250px">
+                        </div>
+                        <button class="btn btn-primary" onclick="showUserModal()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                style="width:16px;height:16px">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Nuevo Usuario
+                        </button>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <tr>
+                            <td colspan="6" class="loading">
+                                <div class="spinner"></div><span>Cargando usuarios...</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="usersPagination" class="pagination-wrapper"></div>
+            </div>
+        </section>
+
+        <!-- PRODUCTS -->
+        <section id="view-products" class="view-section">
+            <div class="page-header">
+                <h1 class="page-title">Gestión de Productos</h1>
+                <p class="page-subtitle">Administra el catálogo y inventario</p>
+            </div>
+            <div class="table-container">
+                <div class="table-header">
+                    <h3 class="table-title">Catálogo de Productos</h3>
+                    <div class="table-actions">
+                        <div class="search-box" style="margin-right:12px">
+                            <input type="text" class="form-input" id="searchProducts"
+                                placeholder="Buscar por nombre, SKU o categoría..."
+                                oninput="debounceSearch('products', this.value)" style="width:250px">
+                        </div>
+                        <button class="btn btn-primary" onclick="showProductModal()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                style="width:16px;height:16px">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Nuevo Producto
+                        </button>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Producto</th>
+                            <th>Categoría</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                        <tr>
+                            <td colspan="6" class="loading">
+                                <div class="spinner"></div><span>Cargando productos...</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="productsPagination" class="pagination-wrapper"></div>
+            </div>
+        </section>
+
+        <!-- ORDERS -->
+        <section id="view-orders" class="view-section">
+            <div class="page-header">
+                <h1 class="page-title">Gestión de Pedidos</h1>
+                <p class="page-subtitle">Controla y actualiza el estado de los pedidos</p>
+            </div>
+            <div class="table-container">
+                <div class="table-header">
+                    <h3 class="table-title">Historial de Pedidos</h3>
+                    <div class="table-actions">
+                        <div class="search-box" style="margin-right:12px">
+                            <input type="text" class="form-input" id="searchOrders"
+                                placeholder="Buscar por ID, usuario o estado..."
+                                oninput="debounceSearch('orders', this.value)" style="width:250px">
+                        </div>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Pedido</th>
+                            <th>Usuario</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Total</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <tr>
+                            <td colspan="6" class="loading">
+                                <div class="spinner"></div><span>Cargando pedidos...</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="ordersPagination" class="pagination-wrapper"></div>
+            </div>
+        </section>
+
+        <!-- ✅ NUEVO: CATEGORÍAS -->
+        <section id="view-categorias" class="view-section">
+            <div class="page-header">
+                <h1 class="page-title">Gestión de Categorías</h1>
+                <p class="page-subtitle">Organiza tus productos por categorías</p>
+            </div>
+            <div class="table-container">
+                <div class="table-header">
+                    <h3 class="table-title">Lista de Categorías</h3>
+                    <div class="table-actions">
+                        <div class="search-box" style="margin-right:12px">
+                            <input type="text" class="form-input" id="searchCategorias"
+                                placeholder="Buscar por nombre o ID..."
+                                oninput="debounceSearch('categorias', this.value)" style="width:250px">
+                        </div>
+                        <button class="btn btn-primary" onclick="showCategoriaModal()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                style="width:16px;height:16px">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Nueva Categoría
+                        </button>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categoriasTableBody">
+                        <tr>
+                            <td colspan="5" class="loading">
+                                <div class="spinner"></div><span>Cargando categorías...</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="categoriasPagination" class="pagination-wrapper"></div>
+            </div>
+        </section>
+
+        <!-- ✅ NUEVO: MÉTODOS DE ENVÍO -->
+        <section id="view-envios" class="view-section">
+            <div class="page-header">
+                <h1 class="page-title">Gestión de Envíos</h1>
+                <p class="page-subtitle">Configura los métodos y costos de envío</p>
+            </div>
+            <div class="table-container">
+                <div class="table-header">
+                    <h3 class="table-title">Métodos de Envío</h3>
+                    <div class="table-actions">
+                        <div class="search-box" style="margin-right:12px">
+                            <input type="text" class="form-input" id="searchEnvios"
+                                placeholder="Buscar por nombre o descripción..."
+                                oninput="debounceSearch('envios', this.value)" style="width:250px">
+                        </div>
+                        <button class="btn btn-primary" onclick="showEnvioModal()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                style="width:16px;height:16px">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Nuevo Método
+                        </button>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Costo Base</th>
+                            <th>Tiempo Entrega</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="enviosTableBody">
+                        <tr>
+                            <td colspan="6" class="loading">
+                                <div class="spinner"></div><span>Cargando métodos...</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="enviosPagination" class="pagination-wrapper"></div>
+            </div>
+        </section>
+
+        <section id="view-reportes" class="view-section">
+
+            <div class="page-header"
+                style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 28px;">
+                <div>
+                    <h1 class="page-title"
+                        style="background: linear-gradient(135deg, #fff 30%, var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; letter-spacing: -0.5px;">
+                        💎 Centro de Analítica Avanzada
+                    </h1>
+                    <p class="page-subtitle" style="color: var(--text-muted); font-size: 14px;">Auditoría financiera,
+                        volumen operativo y salud de pasarelas de pago</p>
+                </div>
+
+                <div id="containerExportaciones"
+                    style="display: none; gap: 10px; align-items: center; animation: fadeInUp 0.4s ease;">
+                    <button class="btn btn-secondary" onclick="exportarReporteCSV()"
+                        style="height: 42px; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(16,185,129,0.3); background: rgba(16,185,129,0.05); color: #10b981;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            style="width:16px;height:16px;">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        Excel / CSV
+                    </button>
+                    <button class="btn btn-secondary" onclick="exportarReportePDF()"
+                        style="height: 42px; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(239,68,68,0.3); background: rgba(239,68,68,0.05); color: #ef4444;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            style="width:16px;height:16px;">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                        </svg>
+                        Documento PDF
+                    </button>
+                    <button class="btn btn-secondary" onclick="exportarReporteImagen()"
+                        style="height: 42px; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(99,102,241,0.3); background: rgba(99,102,241,0.05); color: var(--primary);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            style="width:16px;height:16px;">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                        Imagen PNG
+                    </button>
+                </div>
+            </div>
+
+            <div class="report-filters-panel">
+                <div class="filters-grid-inline">
+
+                    <div class="form-group-wrapper">
+                        <label class="panel-micro-label">Segmento Temporal</label>
+                        <div class="quick-date-buttons">
+                            <button class="btn-quick-date active" onclick="setRangoRapido(0, this)">Hoy</button>
+                            <button class="btn-quick-date" onclick="setRangoRapido(7, this)">7 Días</button>
+                            <button class="btn-quick-date" onclick="setRangoRapido(30, this)">Este Mes</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin: 0;">
+                        <label class="panel-micro-label">Fecha Inicial</label>
+                        <input type="date" class="form-input custom-bi-input" id="fechaInicio"
+                            style="margin: 0; width: 100%;">
+                    </div>
+
+                    <div class="form-group" style="margin: 0;">
+                        <label class="panel-micro-label">Fecha Final</label>
+                        <input type="date" class="form-input custom-bi-input" id="fechaFin"
+                            style="margin: 0; width: 100%;">
+                    </div>
+
+                    <button class="btn btn-primary btn-bi-execute" onclick="cargarReporte()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="svg-pulse">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                        Ejecutar Algoritmo Analítico
+                    </button>
+                </div>
+            </div>
+
+            <div class="bi-kpi-grid">
+                <div class="bi-card glow-success">
+                    <div class="bi-card-inner">
+                        <div style="flex-grow: 1;">
+                            <span class="bi-card-tag">Finanzas</span>
+                            <h4 class="bi-card-title">Volumen de Recaudación</h4>
+                            <div class="bi-card-value" id="reportTotalVentas">S/. 0.00</div>
+                        </div>
+                        <div class="bi-card-icon icon-success-gradient">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="bi-card-footer positive">💵 Pasarelas operativas en línea</div>
+                </div>
+
+                <div class="bi-card glow-primary">
+                    <div class="bi-card-inner">
+                        <div style="flex-grow: 1;">
+                            <span class="bi-card-tag">Operaciones</span>
+                            <h4 class="bi-card-title">Pedidos Procesados</h4>
+                            <div class="bi-card-value" id="reportTotalPedidos">0</div>
+                        </div>
+                        <div class="bi-card-icon icon-primary-gradient">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="bi-card-footer neutral">📦 Órdenes de compra validadas</div>
+                </div>
+
+                <div class="bi-card glow-warning">
+                    <div class="bi-card-inner">
+                        <div style="flex-grow: 1;">
+                            <span class="bi-card-tag">Rendimiento</span>
+                            <h4 class="bi-card-title">Ticket Promedio (AOV)</h4>
+                            <div class="bi-card-value" id="reportTicketPromedio">S/. 0.00</div>
+                        </div>
+                        <div class="bi-card-icon icon-warning-gradient">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="bi-card-footer warning">📊 Valor medio estimado por cliente</div>
+                </div>
+
+                <div class="bi-card glow-danger">
+                    <div class="bi-card-inner">
+                        <div style="flex-grow: 1;">
+                            <span class="bi-card-tag">Audiencia</span>
+                            <h4 class="bi-card-title">Compradores Únicos</h4>
+                            <div class="bi-card-value" id="reportTotalClientes">0</div>
+                        </div>
+                        <div class="bi-card-icon icon-danger-gradient">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="bi-card-footer positive">👥 Clientes con transacciones efectivas</div>
+                </div>
+            </div>
+
+            <div class="bi-graphics-layout">
+
+                <div class="bi-graph-wrapper grid-area-main">
+                    <div class="bi-graph-header">
+                        <div>
+                            <h3 class="bi-graph-title">📈 Vector Macroeconómico del Negocio</h3>
+                            <p class="bi-graph-subtitle">Relación paramétrica simétrica entre flujo monetario e
+                                inyección de compras diarias</p>
+                        </div>
+                    </div>
+                    <div style="position: relative; flex-grow: 1; height: 350px;">
+                        <canvas id="chartVentasDia"></canvas>
+                    </div>
+                </div>
+
+                <div class="bi-graph-wrapper">
+                    <div class="bi-graph-header">
+                        <div>
+                            <h3 class="bi-graph-title">💳 Distribución de Métodos y Pasarelas</h3>
+                            <p class="bi-graph-subtitle">Preferencia de pago de los clientes en tiempo real</p>
+                        </div>
+                    </div>
+                    <div
+                        style="position: relative; flex-grow: 1; height: 350px; display: flex; align-items: center; justify-content: center;">
+                        <canvas id="chartVentasEstado"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bi-tables-grid">
+                <div class="table-container bi-table-premium">
+                    <div class="table-header">
+                        <h3 class="table-title">📅 Bitácora Cronológica de Caja</h3>
+                    </div>
+                    <div style="max-height: 280px; overflow-y: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Fecha Auditoría</th>
+                                    <th>Pedidos</th>
+                                    <th>Monto Recaudado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reporteVentasPorDia">
+                                <tr>
+                                    <td colspan="3" style="text-align:center;padding:40px;color:var(--text-muted)">
+                                        Define un rango de fechas para desplegar las métricas</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="table-container bi-table-premium">
+                    <div class="table-header">
+                        <h3 class="table-title">📊 Rendimiento Operativo y Logs de Pago</h3>
+                    </div>
+                    <div style="max-height: 280px; overflow-y: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Estado Logístico / Transacción</th>
+                                    <th>Volumen</th>
+                                    <th>Capital Acumulado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reporteVentasPorEstado">
+                                <tr>
+                                    <td colspan="3" style="text-align:center;padding:40px;color:var(--text-muted)">Sin
+                                        registros segmentados</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ✅ NUEVO: PAGOS -->
+        <section id="view-pagos" class="view-section">
+            <div class="page-header">
+                <h1 class="page-title">Gestión de Pagos</h1>
+                <p class="page-subtitle">Administra los métodos y registros de pago</p>
+            </div>
+            <div class="table-container">
+                <div class="table-header">
+                    <h3 class="table-title">Registro de Pagos</h3>
+                    <div class="table-actions">
+                        <div class="search-box" style="margin-right:12px">
+                            <input type="text" class="form-input" id="searchPagos"
+                                placeholder="Buscar por ID, usuario o método..."
+                                oninput="debounceSearch('pagos', this.value)" style="width:250px">
+                        </div>
+                        <button class="btn btn-primary" onclick="showPagoModal()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                style="width:16px;height:16px">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Nuevo Pago
+                        </button>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Pago</th>
+                            <th>Pedido</th>
+                            <th>Método</th>
+                            <th>Monto</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pagosTableBody">
+                        <tr>
+                            <td colspan="6" class="loading">
+                                <div class="spinner"></div><span>Cargando pagos...</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="pagosPagination" class="pagination-wrapper"></div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- MODALES EXISTENTES (User, Product, OrderStatus) - Se mantienen igual -->
+    <!-- USER MODAL -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="userModalTitle">Nuevo Usuario</h3>
+                <button class="btn-close" onclick="closeUserModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="width:18px;height:18px">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="userForm" onsubmit="saveUser(event)">
+                    <input type="hidden" id="userId">
+                    <div class="form-group">
+                        <label class="form-label">Nombre Completo *</label>
+                        <input type="text" class="form-input" id="userName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email *</label>
+                        <input type="email" class="form-input" id="userEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Rol *</label>
+                        <select class="form-select" id="userRole">
+                            <option value="CLIENTE">Cliente</option>
+                            <option value="ADMIN">Administrador</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="passwordGroup">
+                        <label class="form-label">Contraseña *</label>
+                        <input type="password" class="form-input" id="userPassword" minlength="6">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeUserModal()">Cancelar</button>
+                <button type="button" class="btn btn-primary"
+                    onclick="document.getElementById('userForm').requestSubmit()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="width:16px;height:16px">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    Guardar Usuario
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUCT MODAL -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="productModalTitle">📦 Nuevo Producto</h3>
+                <button class="btn-close" onclick="closeProductModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="width:18px;height:18px">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm" onsubmit="saveProduct(event)">
+                    <input type="hidden" id="productId">
+                    <div class="form-group">
+                        <label class="form-label">Nombre del Producto *</label>
+                        <input type="text" class="form-input" id="productName" required placeholder="Ej: Laptop Gaming">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">SKU *</label>
+                        <input type="text" class="form-input" id="productSku" required placeholder="Ej: LAP-GAM-001">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Precio (S/.) *</label>
+                        <input type="number" class="form-input" id="productPrice" step="0.01" min="0" required
+                            placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Stock *</label>
+                        <input type="number" class="form-input" id="productStock" min="0" required placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Categoría *</label>
+                        <select class="form-select" id="productCategory" required>
+                            <option value="">Cargando categorías...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">🖼️ Imagen del Producto</label>
+                        <div class="image-preview-container">
+                            <div style="flex:1">
+                                <input type="file" class="form-input" id="productImageInput" accept="image/*"
+                                    onchange="previewImage(this)" style="padding:10px">
+                                <small style="color:var(--text-muted);margin-top:4px;display:block">Formatos: JPG, PNG,
+                                    GIF (Máx 5MB)</small>
+                            </div>
+                            <div id="imagePreview" class="image-preview-box">
+                                <span class="image-preview-placeholder">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        style="width:24px;height:24px">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                        <polyline points="21 15 16 10 5 21"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="productImageUrl">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeProductModal()">Cancelar</button>
+                <button type="submit" class="btn btn-primary"
+                    onclick="document.getElementById('productForm').requestSubmit()">Guardar Producto</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDER STATUS MODAL -->
+    <div class="modal-overlay" id="orderStatusModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Actualizar Estado</h3>
+                <button class="btn-close" onclick="closeOrderStatusModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="width:18px;height:18px">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="orderStatusId">
+                <div class="form-group">
+                    <label class="form-label">Nuevo Estado del Pedido</label>
+                    <select class="form-select" id="orderStatus">
+                        <option value="PENDIENTE">Pendiente</option>
+                        <option value="ENVIADO">Enviado</option>
+                        <option value="PAGADO">Pagado</option>
+                        <option value="CANCELADO">Cancelado</option>
+                    </select>
+                </div>
+                <div style="background:var(--bg-card);padding:16px;border-radius:12px;margin-top:20px">
+                    <div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:8px">Estados disponibles:</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px">
+                        <span class="badge badge-warning">PENDIENTE</span>
+                        <span class="badge badge-info">ENVIADO</span>
+                        <span class="badge badge-success">PAGADO</span>
+                        <span class="badge badge-danger">CANCELADO</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeOrderStatusModal()">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="updateOrderStatus()">Actualizar Estado</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ NUEVO: CATEGORÍA MODAL -->
+    <div class="modal-overlay" id="categoriaModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="categoriaModalTitle">Nueva Categoría</h3>
+                <button class="btn-close" onclick="closeCategoriaModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="width:18px;height:18px">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="categoriaForm" onsubmit="saveCategoria(event)">
+                    <input type="hidden" id="categoriaId">
+                    <div class="form-group">
+                        <label class="form-label">Nombre de la Categoría *</label>
+                        <input type="text" class="form-input" id="categoriaNombre" required
+                            placeholder="Ej: Electrónica">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Descripción</label>
+                        <textarea class="form-input" id="categoriaDescripcion" rows="3"
+                            placeholder="Descripción opcional de la categoría"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Estado</label>
+                        <select class="form-select" id="categoriaActivo">
+                            <option value="true">Activa</option>
+                            <option value="false">Inactiva</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeCategoriaModal()">Cancelar</button>
+                <button type="button" class="btn btn-primary"
+                    onclick="document.getElementById('categoriaForm').requestSubmit()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="width:16px;height:16px">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    Guardar Categoría
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ NUEVO: MÉTODO DE ENVÍO MODAL -->
+    <div class="modal-overlay" id="envioModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="envioModalTitle">Nuevo Método de Envío</h3>
+                <button class="btn-close" onclick="closeEnvioModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="width:18px;height:18px">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="envioForm" onsubmit="saveEnvio(event)">
+                    <input type="hidden" id="envioId">
+                    <div class="form-group">
+                        <label class="form-label">Nombre del Método *</label>
+                        <input type="text" class="form-input" id="envioNombre" required placeholder="Ej: Envío Express">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Descripción</label>
+                        <textarea class="form-input" id="envioDescripcion" rows="2"
+                            placeholder="Detalles del método de envío"></textarea>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                        <div class="form-group">
+                            <label class="form-label">Costo Base (S/.) *</label>
+                            <input type="number" class="form-input" id="envioCosto" step="0.01" min="0" required
+                                placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Estado</label>
+                            <select class="form-select" id="envioActivo">
+                                <option value="true">Activo</option>
+                                <option value="false">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                        <div class="form-group">
+                            <label class="form-label">Días Mínimos</label>
+                            <input type="number" class="form-input" id="envioDiasMin" min="0" value="1">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Días Máximos</label>
+                            <input type="number" class="form-input" id="envioDiasMax" min="1" value="5">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeEnvioModal()">Cancelar</button>
+                <button type="button" class="btn btn-primary"
+                    onclick="document.getElementById('envioForm').requestSubmit()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="width:16px;height:16px">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    Guardar Método
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ NUEVO: PAGO MODAL -->
+    <div class="modal-overlay" id="pagoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="pagoModalTitle">💳 Nuevo Pago</h3>
+                <button class="btn-close" onclick="closePagoModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="width:18px;height:18px">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="pagoForm" onsubmit="savePago(event)">
+                    <input type="hidden" id="pagoId">
+
+                    <div class="form-group">
+                        <label class="form-label">Pedido *</label>
+                        <select class="form-select" id="pagoPedidoId" required>
+                            <option value="">Cargando pedidos...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Método de Pago *</label>
+                        <select class="form-select" id="pagoMetodo" required>
+                            <option value="TARJETA">Tarjeta de Crédito/Débito</option>
+                            <option value="EFECTIVO">Efectivo</option>
+                            <option value="TRANSFERENCIA">Transferencia Bancaria</option>
+                            <option value="PAYPAL">PayPal</option>
+                            <option value="YAPE">Yape</option>
+                            <option value="PLIN">Plin</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Monto (S/.) *</label>
+                        <input type="number" class="form-input" id="pagoMonto" step="0.01" min="0" required
+                            placeholder="0.00">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Fecha de Pago *</label>
+                        <input type="datetime-local" class="form-input" id="pagoFecha" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Estado *</label>
+                        <select class="form-select" id="pagoEstado" required>
+                            <option value="PENDIENTE">Pendiente</option>
+                            <option value="PROCESADO">Procesado</option>
+                            <option value="APROBADO">Aprobado</option>
+                            <option value="RECHAZADO">Rechazado</option>
+                            <option value="REEMBOLSADO">Reembolsado</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Referencia / Transacción</label>
+                        <input type="text" class="form-input" id="pagoReferencia" placeholder="Ej: TXN-123456">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Notas</label>
+                        <textarea class="form-textarea" id="pagoNotas" rows="3"
+                            placeholder="Información adicional..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closePagoModal()">Cancelar</button>
+                <button type="submit" class="btn btn-primary"
+                    onclick="document.getElementById('pagoForm').requestSubmit()">
+                    Guardar Pago
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="modal-overlay" id="modalConfirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="confirmTitle">Confirmar acción</h3>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage">¿Estás seguro de continuar?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeConfirmModal()">Cancelar</button>
+                <button class="btn btn-primary" id="btnConfirmAction">Confirmar</button>
+            </div>
+        </div>
+    </div>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="admin.js"></script>
+</body>
+
+</html>
