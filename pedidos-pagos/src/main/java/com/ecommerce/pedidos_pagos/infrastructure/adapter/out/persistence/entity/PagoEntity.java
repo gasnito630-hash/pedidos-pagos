@@ -13,33 +13,38 @@ public class PagoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pagoid")
-    private Long pagoid;
+    private Long pagoId;
 
     @Column(name = "pedidoid")
-    private Long pedidoid;
+    private Long pedidoId;
 
     @Column(name = "metodopago", length = 20)
-    private String metodopago;
+    private String metodoPago;
 
+    // ✅ USAR "Monto" (como está en la BD), no "MontoPago"
     @Column(name = "monto", precision = 10, scale = 2)
     private BigDecimal monto;
 
     @Column(name = "estadopago", length = 20)
-    private String estadopago;
+    private String estadoPago;
 
     @Column(name = "transaccionexterna", length = 100)
-    private String transaccionexterna;
+    private String transaccionExterna;
 
     @Column(name = "fechapago")
-    private LocalDateTime fechapago;
+    private LocalDateTime fechaPago;
 
     @PrePersist
     protected void onCreate() {
-        if (fechapago == null) {
-            fechapago = LocalDateTime.now();
+        if (fechaPago == null) {
+            fechaPago = LocalDateTime.now();
         }
-        if (estadopago == null) {
-            estadopago = "COMPLETADO";
+        if (estadoPago == null) {
+            estadoPago = "COMPLETADO";
         }
     }
+
+    // Si @Data no genera los getters/setters, agrégalos manualmente:
+    // public BigDecimal getMonto() { return monto; }
+    // public void setMonto(BigDecimal monto) { this.monto = monto; }
 }
