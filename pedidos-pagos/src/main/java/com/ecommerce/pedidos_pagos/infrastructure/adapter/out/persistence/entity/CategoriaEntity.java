@@ -5,21 +5,20 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "Categoria") // ← Sugiero plural para consistencia con "productos"
+@Table(name = "categoria")
 public class CategoriaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CategoriaID")
-    private Long categoriaId;
+    @Column(name = "categoriaid")
+    private Long categoriaid;
 
-    @Column(name = "Nombre", nullable = false, length = 100)
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
-    @Column(name = "Descripcion", length = 255)
+    @Column(name = "descripcion", length = 255)
     private String descripcion;
 
-    // Si tu tabla NO tiene la columna "Activo", comenta o elimina esta línea:
-    @Column(name = "Activo")
+    @Column(name = "activo")
     private Boolean activo;
 }
