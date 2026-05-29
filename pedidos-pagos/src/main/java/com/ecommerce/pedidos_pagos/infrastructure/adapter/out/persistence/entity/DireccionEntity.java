@@ -10,18 +10,26 @@ public class DireccionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "direccionid")
-    private Long direccionid;
+    private Long direccionId;
 
-    @Column(name = "usuarioid")
-    private Long usuarioid;
-    @Column(name = "calle")
+    @Column(name = "usuarioid", nullable = false)
+    private Long usuarioId;
+
+    @Column(name = "calle", nullable = false, length = 200)
     private String calle;
-    @Column(name = "numero")
+
+    @Column(name = "numero", nullable = false, length = 20)
     private String numero;
-    @Column(name = "ciudad")
+
+    @Column(name = "ciudad", length = 100)
     private String ciudad;
-    @Column(name = "pais")
+
+    @Column(name = "pais", length = 100)
     private String pais;
+
+    @Column(name = "codigopostal", length = 20)
+    private String codigoPostal;
+
     @Column(name = "esprincipal")
-    private Boolean esprincipal;
+    private Boolean esPrincipal;
 }
