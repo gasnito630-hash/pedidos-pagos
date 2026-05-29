@@ -29,9 +29,19 @@
 
 <body>
     <!-- SIDEBAR -->
+
     <aside class="sidebar">
         <div>
-            <div class="sidebar-logo"><i class="fa-solid fa-box"></i> <span>Core</span>Commerce</div>
+            <div class="sidebar-logo">
+                <i class="fa-solid fa-box"></i>
+                <span class="logo-text">CoreCommerce</span>
+
+                <!-- El botón queda fuera del span del texto -->
+                <button class="btn-secondary theme-toggle" onclick="toggleTheme()" title="Cambiar tema">
+                    <i class="fa-solid fa-circle-half-stroke"></i>
+                </button>
+            </div>
+
             <div class="menu-section">
                 <div class="menu-section-title">Principal</div>
                 <ul class="menu-list">
@@ -90,6 +100,7 @@
                     <i class="fa-solid fa-cart-shopping"></i> Carrito <span class="cart-badge" id="cartBadge">0</span>
                 </button>
             </div>
+
             <div class="categories-scroll" id="categoriesContainer">
                 <button class="category-chip active" onclick="filterCategory('TODOS', this)">Todos</button>
             </div>

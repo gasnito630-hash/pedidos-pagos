@@ -385,18 +385,18 @@ body {
 }
 
 /* ================= RESPONSIVE ================= */
-@media (max-width: 1000px) {
+@media (max-width: 1200px) {
     .auth-visual {
         display: none;
     }
 
     .auth-form-wrapper {
-        max-width: 100%;
+        max-width: 150%;
         padding: 2.5rem 2rem;
     }
 }
 
-@media (max-width: 580px) {
+@media (max-width: 680px) {
     body {
         overflow: auto;
     }
