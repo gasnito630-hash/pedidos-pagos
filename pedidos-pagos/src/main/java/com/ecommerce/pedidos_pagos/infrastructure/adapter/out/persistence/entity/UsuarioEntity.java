@@ -1,6 +1,6 @@
 package com.ecommerce.pedidos_pagos.infrastructure.adapter.out.persistence.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.*; // ← Importa desde jakarta, NO desde javax
 import lombok.Data;
 import java.time.LocalDateTime;
 
@@ -12,7 +12,7 @@ public class UsuarioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "usuarioid")
-    private Long usuarioid;
+    private Long usuarioId;
 
     @Column(name = "email", nullable = false, unique = true, length = 150)
     private String email;
@@ -33,14 +33,14 @@ public class UsuarioEntity {
     private Boolean activo;
 
     @Column(name = "creadoen")
-    private LocalDateTime creadoen;
+    private LocalDateTime creadoEn;
 
-    public Long getUsuarioid() {
-        return usuarioid;
+    public Long getUsuarioId() {
+        return usuarioId;
     }
 
-    public void setUsuarioid(Long usuarioid) {
-        this.usuarioid = usuarioid;
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
     public String getEmail() {
@@ -91,12 +91,12 @@ public class UsuarioEntity {
         this.activo = activo;
     }
 
-    public java.time.LocalDateTime getCreadoen() {
-        return creadoen;
+    public java.time.LocalDateTime getCreadoEn() {
+        return creadoEn;
     }
 
-    public void setCreadoen(java.time.LocalDateTime creadoen) {
-        this.creadoen = creadoen;
+    public void setCreadoEn(java.time.LocalDateTime creadoEn) {
+        this.creadoEn = creadoEn;
     }
 
 }
