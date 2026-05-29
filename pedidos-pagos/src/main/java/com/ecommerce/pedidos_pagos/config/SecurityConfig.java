@@ -123,4 +123,22 @@ public class SecurityConfig implements WebMvcConfigurer {
                 return source;
         }
 
+        @Bean
+public ClientRegistrationRepository clientRegistrationRepository() {
+    return new InMemoryClientRegistrationRepository(googleClientRegistration());
+}
+
+private ClientRegistration googleClientRegistration() {
+    return ClientRegistration.withRegistrationId("google")
+            .clientId(System.getenv("GOOGLE_CLIENT_ID")) // Use your ENV var name
+            .clientSecret(System.getenv("GOOGLE_CLIENT_SECRET"))
+            .scope("profile", "email")
+            .authorizationUri("https://accounts.google.com/o/oauth2/v2/auth")
+            .tokenUri("https://www.googleapis.com/oauth2/v4/token")
+            .userInfoUri("https://www.googleapis.com/oauth2/v3/userinfo")
+            .userNameAttributeName("sub")
+            .clientName("Google")
+            .build();
+}
+
 }
