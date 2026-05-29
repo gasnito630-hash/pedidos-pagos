@@ -12,20 +12,22 @@ public class DetallePedidoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "detalleid")
-    private Long detalleid;
+    private Long detalleId;
 
-    @Column(name = "pedidoid")
-    private Long pedidoid;
+    @Column(name = "pedidoid", nullable = false)
+    private Long pedidoId;
 
-    @Column(name = "productoid")
-    private Long productoid;
+    @Column(name = "productoid", nullable = false)
+    private Long productoId;
 
-    @Column(name = "cantidad")
+    @Column(name = "cantidad", nullable = false)
     private Integer cantidad;
 
-    @Column(name = "preciounitario", precision = 10, scale = 2)
-    private BigDecimal preciounitario;
+    @Column(name = "preciounitario", nullable = false, precision = 10, scale = 2)
+    private BigDecimal precioUnitario;
 
+    // ✅ ELIMINAR: Si es columna calculada, NO la mapeamos para INSERT/UPDATE
+    // Solo la leemos (opcional con @Column(insertable = false, updatable = false))
     @Column(name = "subtotal", precision = 10, scale = 2, insertable = false, updatable = false)
     private BigDecimal subtotal;
 }
