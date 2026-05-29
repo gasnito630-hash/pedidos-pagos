@@ -13,42 +13,44 @@ public class PedidoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pedidoid")
-    private Long pedidoid;
+    private Long pedidoId;
 
-    @Column(name = "usuarioid")
-    private Long usuarioid;
+    @Column(name = "usuarioid", nullable = false)
+    private Long usuarioId;
 
     @Column(name = "direccionenvioid")
-    private Long direccionenvioid;
+    private Long direccionEnvioId;
 
-    @Column(name = "estado", length = 20)
+    @Column(name = "estado", nullable = false, length = 50)
     private String estado;
 
-    @Column(name = "montototal", precision = 10, scale = 2)
-    private BigDecimal montototal;
+    @Column(name = "montototal", nullable = false, precision = 10, scale = 2)
+    private BigDecimal montoTotal;
 
     @Column(name = "creadoen")
-    private LocalDateTime creadoen;
+    private LocalDateTime creadoEn;
 
     @Column(name = "actualizadoen")
-    private LocalDateTime actualizadoen;
+    private LocalDateTime actualizadoEn;
 
-    @Column(name = "direccionenvio", length = 255)
-    private String direccionenvio;
+    @Column(name = "direccionenvio", length = 500)
+    private String direccionEnvio;
 
     @Column(name = "telefonocontacto", length = 20)
-    private String telefonocontacto;
+    private String telefonoContacto;
+
+    // ✅ NO AGREGAR metodoPago - No existe en la tabla Pedido
 
     @PrePersist
     protected void onCreate() {
-        creadoen = LocalDateTime.now();
-        actualizadoen = LocalDateTime.now();
+        creadoEn = LocalDateTime.now();
+        actualizadoEn = LocalDateTime.now();
         if (estado == null)
             estado = "PENDIENTE";
     }
 
     @PreUpdate
     protected void onUpdate() {
-        actualizadoen = LocalDateTime.now();
+        actualizadoEn = LocalDateTime.now();
     }
 }
