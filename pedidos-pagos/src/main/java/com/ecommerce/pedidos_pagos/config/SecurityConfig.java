@@ -20,7 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-// ✅ IMPORTS NECESARIOS
+// ✅ IMPORTS NECESARIOS PARA OAUTH2
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
@@ -114,7 +114,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
+    } // ✅ CIERRE de filterChain()
 
     // AGREGAR ESTE MÉTODO para servir imágenes
     @Override
@@ -124,7 +124,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler("/uploads/**")
             .addResourceLocations("file:" + uploadDir);
-    }
+    } // ✅ CIERRE de addResourceHandlers()
 
     // Configuración CORS para Render + localhost
     @Bean
@@ -142,7 +142,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
+    } // ✅ CIERRE de corsConfigurationSource()
 
     // ✅ REPOSITORIO DE CLIENTES OAUTH2 - OPCIONAL
     @Bean
@@ -170,6 +170,10 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .userNameAttributeName("sub")
                 .clientName("Google")
                 .build());
-        }
+        } // ✅ CIERRE del if
         
-        // ✅ Retornar repositorio vacío si no hay OAuth
+        // ✅ Retornar repositorio vacío si no hay OAuth2 configurado
+        return new InMemoryClientRegistrationRepository(registrations);
+    } // ✅ CIERRE de clientRegistrationRepository()
+
+} // ✅ CIERRE FINAL de la clase SecurityConfig
