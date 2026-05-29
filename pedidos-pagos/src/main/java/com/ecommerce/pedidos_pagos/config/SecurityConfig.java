@@ -20,7 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-// ✅ IMPORTS NECESARIOS PARA OAUTH2
+// ✅ IMPORTS NECESARIOS
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
@@ -28,6 +28,8 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -92,17 +94,24 @@ public class SecurityConfig implements WebMvcConfigurer {
             // 5. Desactivar formularios de login/logout de Spring
             .formLogin(form -> form.disable())
             .logout(logout -> logout.disable())
-            .httpBasic(basic -> basic.disable())
+            .httpBasic(basic -> basic.disable());
 
-            // 6. CONFIGURACIÓN OAUTH2 (GOOGLE) - CORREGIDO
-            .oauth2Login(oauth2 -> oauth2
+        // ✅ 6. CONFIGURACIÓN OAUTH2 (GOOGLE) - SOLO SI HAY CREDENCIALES
+        String googleClientId = System.getenv("GOOGLE_CLIENT_ID");
+        String googleClientSecret = System.getenv("GOOGLE_CLIENT_SECRET");
+        
+        if (googleClientId != null && !googleClientId.isEmpty() && 
+            googleClientSecret != null && !googleClientSecret.isEmpty()) {
+            
+            http.oauth2Login(oauth2 -> oauth2
                 .loginPage("/index.html")
                 .userInfoEndpoint(userInfo -> userInfo
                     .userService(customOAuth2UserService))
-                .successHandler(customOAuth2SuccessHandler))
+                .successHandler(customOAuth2SuccessHandler));
+        }
 
-            // 7. Agregar filtro JWT
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        // 7. Agregar filtro JWT
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -121,7 +130,6 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // ✅ Permitir Render + localhost + cualquier origen en desarrollo
         configuration.setAllowedOrigins(Arrays.asList(
             "http://localhost:8080",
             "https://pedidos-pagos.onrender.com",
@@ -136,30 +144,32 @@ public class SecurityConfig implements WebMvcConfigurer {
         return source;
     }
 
-    // ✅ REPOSITORIO DE CLIENTES OAUTH2
+    // ✅ REPOSITORIO DE CLIENTES OAUTH2 - OPCIONAL
     @Bean
     public ClientRegistrationRepository clientRegistrationRepository() {
-        return new InMemoryClientRegistrationRepository(googleClientRegistration());
-    }
-
-    // ✅ CONFIGURACIÓN DE GOOGLE OAUTH2 - CORREGIDA
-    private ClientRegistration googleClientRegistration() {
-        return ClientRegistration.withRegistrationId("google")
-            .clientId(System.getenv("GOOGLE_CLIENT_ID"))
-            .clientSecret(System.getenv("GOOGLE_CLIENT_SECRET"))
-            .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-            // ✅ ESTO ES LO QUE FALTABA - OBLIGATORIO
-            .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-            .redirectUri("{baseUrl}/login/oauth2/code/google")
-            .scope("openid", "profile", "email")
-            .authorizationUri("https://accounts.google.com/o/oauth2/v2/auth")
-            .tokenUri("https://www.googleapis.com/oauth2/v4/token")
-            .jwkSetUri("https://www.googleapis.com/oauth2/v3/certs")
-            .userInfoUri("https://www.googleapis.com/oauth2/v3/userinfo")
-            .userNameAttributeName("sub")
-            .clientName("Google")
-            .build();
-    }
-
-
-}
+        List<ClientRegistration> registrations = new ArrayList<>();
+        
+        String googleClientId = System.getenv("GOOGLE_CLIENT_ID");
+        String googleClientSecret = System.getenv("GOOGLE_CLIENT_SECRET");
+        
+        // ✅ Solo agregar Google si hay credenciales válidas
+        if (googleClientId != null && !googleClientId.isEmpty() && 
+            googleClientSecret != null && !googleClientSecret.isEmpty()) {
+            
+            registrations.add(ClientRegistration.withRegistrationId("google")
+                .clientId(googleClientId)
+                .clientSecret(googleClientSecret)
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .redirectUri("{baseUrl}/login/oauth2/code/google")
+                .scope("openid", "profile", "email")
+                .authorizationUri("https://accounts.google.com/o/oauth2/v2/auth")
+                .tokenUri("https://www.googleapis.com/oauth2/v4/token")
+                .jwkSetUri("https://www.googleapis.com/oauth2/v3/certs")
+                .userInfoUri("https://www.googleapis.com/oauth2/v3/userinfo")
+                .userNameAttributeName("sub")
+                .clientName("Google")
+                .build());
+        }
+        
+        // ✅ Retornar repositorio vacío si no hay OAuth
