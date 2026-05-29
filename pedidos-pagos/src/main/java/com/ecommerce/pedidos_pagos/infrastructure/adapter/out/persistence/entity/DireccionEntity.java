@@ -4,24 +4,24 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "Direccion")
+@Table(name = "direccion")
 @Data
 public class DireccionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "DireccionID")
-    private Long direccionId;
+    @Column(name = "direccionid")
+    private Long direccionid;
 
-    @Column(name = "UsuarioID")
-    private Long usuarioId;
-    @Column(name = "Calle")
+    @Column(name = "usuarioid")
+    private Long usuarioid;
+    @Column(name = "calle")
     private String calle;
-    @Column(name = "Numero")
+    @Column(name = "numero")
     private String numero;
-    @Column(name = "Ciudad")
+    @Column(name = "ciudad")
     private String ciudad;
-    @Column(name = "Pais")
+    @Column(name = "pais")
     private String pais;
-    @Column(name = "EsPrincipal")
-    private Boolean esPrincipal;
+    @Column(name = "esprincipal")
+    private Boolean esprincipal;
 }
