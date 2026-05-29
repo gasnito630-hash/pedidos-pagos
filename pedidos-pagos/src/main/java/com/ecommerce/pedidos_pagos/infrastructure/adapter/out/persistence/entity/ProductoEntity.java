@@ -7,13 +7,13 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "producto", schema = "dbo")
+@Table(name = "producto")
 public class ProductoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "productoid")
-    private Long productoid;
+    private Long productoId;
 
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
@@ -27,19 +27,24 @@ public class ProductoEntity {
     @Column(name = "stock", nullable = false)
     private Integer stock;
 
+    @Column(name = "imagenurl", length = 500)
+    private String imagenUrl;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categoriaid")
     private CategoriaEntity categoria;
 
-    @Column(name = "imagenurl", length = 500)
-    private String imagenurl;
+    // Si usas relaciones inversas, pueden estar aquí
+    // @OneToMany(mappedBy = "producto")
+    // private List<PedidoProductoEntity> pedidoProductos;
 
-    public Long getProductoid() {
-        return productoid;
+    // Getters y Setters manuales (por si Lombok falla)
+    public Long getProductoId() {
+        return productoId;
     }
 
-    public void setProductoid(Long productoid) {
-        this.productoid = productoid;
+    public void setProductoId(Long productoId) {
+        this.productoId = productoId;
     }
 
     public String getNombre() {
@@ -82,12 +87,13 @@ public class ProductoEntity {
         this.categoria = categoria;
     }
 
-    public String getImagenurl() {
-        System.out.println("DEBUG: getImagenurl llamado para " + nombre + " = " + imagenurl);
-        return imagenurl;
+    // ✅ GETTER Y SETTER PARA imagenUrl (CRÍTICO)
+    public String getImagenUrl() {
+        System.out.println("DEBUG: getImagenUrl llamado para " + nombre + " = " + imagenUrl);
+        return imagenUrl;
     }
 
-    public void setImagenurl(String imagenurl) {
-        this.imagenurl = imagenurl;
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
     }
 }
