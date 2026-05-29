@@ -67,6 +67,7 @@
             <version>12.4.2.jre11</version>  <!-- ← VERSIÓN EXPLÍCITA -->
             <scope>runtime</scope>
         </dependency>
+             
 
         <!-- Driver para PostgreSQL (Necesario para Render) -->
         <dependency>
@@ -96,6 +97,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
     </dependency>
+              <!-- Google OAuth2 Login -->
+        <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-oauth2-client</artifactId>
+</dependency>
+    </dependencies>
     </dependencies>
     
     <build>
