@@ -8,6 +8,7 @@ import com.ecommerce.pedidos_pagos.infrastructure.adapter.in.web.security.JwtUti
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

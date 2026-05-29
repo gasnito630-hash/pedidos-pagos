@@ -5,6 +5,10 @@ import com.ecommerce.pedidos_pagos.infrastructure.adapter.in.web.dto.PedidoRespo
 import com.ecommerce.pedidos_pagos.infrastructure.adapter.out.persistence.entity.*;
 import com.ecommerce.pedidos_pagos.infrastructure.adapter.out.persistence.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +27,11 @@ public class PedidoService {
         private final PagoRepository pagoRepository;
         private final ProductoRepository productoRepository;
         private final DireccionRepository direccionRepository;
+
+        public Page<PedidoEntity> listarPedidos(int page, int size, String buscar) {
+                Pageable pageable = PageRequest.of(page, size, Sort.by("pedidoId").descending());
+                return pedidoRepository.buscarPedidos(buscar, pageable);
+        }
 
         // ✅ Para gestión de envíos
         private final MetodoEnvioRepository metodoEnvioRepository;
@@ -247,4 +256,5 @@ public class PedidoService {
                         throw new RuntimeException("Error al eliminar el pedido: " + e.getMessage());
                 }
         }
+
 }
