@@ -6,51 +6,49 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Pedido")
+@Table(name = "pedido")
 @Data
 public class PedidoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "PedidoID")
-    private Long pedidoId;
+    @Column(name = "pedidoid")
+    private Long pedidoid;
 
-    @Column(name = "UsuarioID")
-    private Long usuarioId;
+    @Column(name = "usuarioid")
+    private Long usuarioid;
 
-    @Column(name = "DireccionEnvioID")
-    private Long direccionEnvioId;
+    @Column(name = "direccionenvioid")
+    private Long direccionenvioid;
 
-    @Column(name = "Estado", length = 20)
+    @Column(name = "estado", length = 20)
     private String estado;
 
-    @Column(name = "MontoTotal", precision = 10, scale = 2)
-    private BigDecimal montoTotal;
+    @Column(name = "montototal", precision = 10, scale = 2)
+    private BigDecimal montototal;
 
-    @Column(name = "CreadoEn")
-    private LocalDateTime creadoEn;
+    @Column(name = "creadoen")
+    private LocalDateTime creadoen;
 
-    @Column(name = "ActualizadoEn")
-    private LocalDateTime actualizadoEn;
+    @Column(name = "actualizadoen")
+    private LocalDateTime actualizadoen;
 
-    @Column(name = "DireccionEnvio", length = 255)
-    private String direccionEnvio;
+    @Column(name = "direccionenvio", length = 255)
+    private String direccionenvio;
 
-    @Column(name = "TelefonoContacto", length = 20)
-    private String telefonoContacto;
-
-    // ✅ NO AGREGAR metodoPago - No existe en la tabla Pedido
+    @Column(name = "telefonocontacto", length = 20)
+    private String telefonocontacto;
 
     @PrePersist
     protected void onCreate() {
-        creadoEn = LocalDateTime.now();
-        actualizadoEn = LocalDateTime.now();
+        creadoen = LocalDateTime.now();
+        actualizadoen = LocalDateTime.now();
         if (estado == null)
             estado = "PENDIENTE";
     }
 
     @PreUpdate
     protected void onUpdate() {
-        actualizadoEn = LocalDateTime.now();
+        actualizadoen = LocalDateTime.now();
     }
 }
