@@ -1,38 +1,38 @@
 package com.ecommerce.pedidos_pagos.infrastructure.adapter.out.persistence.entity;
 
-import jakarta.persistence.*; // ← Importa desde jakarta, NO desde javax
+import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "Usuario")
 @Data
 public class UsuarioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "usuarioid")
+    @Column(name = "UsuarioID")
     private Long usuarioId;
 
-    @Column(name = "email", nullable = false, unique = true, length = 150)
+    @Column(name = "Email", nullable = false, unique = true, length = 150)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(name = "Password", nullable = false, length = 255)
     private String password;
 
-    @Column(name = "nombre", nullable = false, length = 100)
+    @Column(name = "Nombre", nullable = false, length = 100)
     private String nombre;
 
-    @Column(name = "apellido", nullable = false, length = 100)
+    @Column(name = "Apellido", nullable = false, length = 100)
     private String apellido;
 
-    @Column(name = "rol", nullable = false, length = 20)
+    @Column(name = "Rol", nullable = false, length = 20)
     private String rol;
 
-    @Column(name = "activo")
+    @Column(name = "Activo")
     private Boolean activo;
 
-    @Column(name = "creadoen")
+    @Column(name = "CreadoEn")
     private LocalDateTime creadoEn;
 
     public Long getUsuarioId() {

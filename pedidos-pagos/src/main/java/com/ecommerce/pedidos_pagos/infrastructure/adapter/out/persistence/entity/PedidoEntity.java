@@ -6,37 +6,37 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "pedido")
+@Table(name = "Pedido")
 @Data
 public class PedidoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pedidoid")
+    @Column(name = "PedidoID")
     private Long pedidoId;
 
-    @Column(name = "usuarioid", nullable = false)
+    @Column(name = "UsuarioID")
     private Long usuarioId;
 
-    @Column(name = "direccionenvioid")
+    @Column(name = "DireccionEnvioID")
     private Long direccionEnvioId;
 
-    @Column(name = "estado", nullable = false, length = 50)
+    @Column(name = "Estado", length = 20)
     private String estado;
 
-    @Column(name = "montototal", nullable = false, precision = 10, scale = 2)
+    @Column(name = "MontoTotal", precision = 10, scale = 2)
     private BigDecimal montoTotal;
 
-    @Column(name = "creadoen")
+    @Column(name = "CreadoEn")
     private LocalDateTime creadoEn;
 
-    @Column(name = "actualizadoen")
+    @Column(name = "ActualizadoEn")
     private LocalDateTime actualizadoEn;
 
-    @Column(name = "direccionenvio", length = 500)
+    @Column(name = "DireccionEnvio", length = 255)
     private String direccionEnvio;
 
-    @Column(name = "telefonocontacto", length = 20)
+    @Column(name = "TelefonoContacto", length = 20)
     private String telefonoContacto;
 
     // ✅ NO AGREGAR metodoPago - No existe en la tabla Pedido

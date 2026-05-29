@@ -6,32 +6,32 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "pago")
+@Table(name = "Pago")
 @Data
 public class PagoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pagoid")
+    @Column(name = "PagoID")
     private Long pagoId;
 
-    @Column(name = "pedidoid")
+    @Column(name = "PedidoID")
     private Long pedidoId;
 
-    @Column(name = "metodopago", length = 20)
+    @Column(name = "MetodoPago", length = 20)
     private String metodoPago;
 
     // ✅ USAR "Monto" (como está en la BD), no "MontoPago"
-    @Column(name = "monto", precision = 10, scale = 2)
+    @Column(name = "Monto", precision = 10, scale = 2)
     private BigDecimal monto;
 
-    @Column(name = "estadopago", length = 20)
+    @Column(name = "EstadoPago", length = 20)
     private String estadoPago;
 
-    @Column(name = "transaccionexterna", length = 100)
+    @Column(name = "TransaccionExterna", length = 100)
     private String transaccionExterna;
 
-    @Column(name = "fechapago")
+    @Column(name = "FechaPago")
     private LocalDateTime fechaPago;
 
     @PrePersist

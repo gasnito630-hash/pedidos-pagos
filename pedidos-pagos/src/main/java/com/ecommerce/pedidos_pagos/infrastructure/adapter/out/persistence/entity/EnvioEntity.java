@@ -5,33 +5,27 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "envio")
+@Table(name = "Envio")
 @Data
 public class EnvioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "envioid")
+    @Column(name = "EnvioID")
     private Long envioId;
 
-    @Column(name = "pedidoid", nullable = false)
+    @Column(name = "PedidoID")
     private Long pedidoId;
-
-    @Column(name = "metodoenvioid")
+    @Column(name = "MetodoEnvioID")
     private Long metodoEnvioId;
-
-    @Column(name = "numerotracking", length = 100)
+    @Column(name = "NumeroTracking", length = 100)
     private String numeroTracking;
-
-    @Column(name = "estadoenvio", length = 50)
+    @Column(name = "EstadoEnvio", length = 50)
     private String estadoEnvio;
-
-    @Column(name = "fechaestimadaentrega")
+    @Column(name = "FechaEstimadaEntrega")
     private LocalDateTime fechaEstimadaEntrega;
-
-    @Column(name = "fechaenvio")
+    @Column(name = "FechaEnvio")
     private LocalDateTime fechaEnvio;
-
-    @Column(name = "fechaentrega")
+    @Column(name = "FechaEntrega")
     private LocalDateTime fechaEntrega;
 
     @PrePersist
