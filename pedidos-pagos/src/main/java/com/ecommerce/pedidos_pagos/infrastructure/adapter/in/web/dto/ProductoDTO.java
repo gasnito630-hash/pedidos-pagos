@@ -11,10 +11,8 @@ public class ProductoDTO {
     private BigDecimal precio;
     private Integer stock;
 
-    // ✅ CAMPO PARA RECIBIR EL ID DE CATEGORÍA DESDE EL FRONTEND
     private Long categoriaId;
     private String imagenUrl;
 
-    // Opcional: si quieres recibir el objeto completo (no recomendado)
-    // private CategoriaEntity categoria;
+
 }
