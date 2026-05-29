@@ -8,21 +8,27 @@ import java.math.BigDecimal;
 @Table(name = "metodoenvio")
 @Data
 public class MetodoEnvioEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "metodoid")
-    private Long metodoid;
+    private Long metodoId;
 
-    @Column(name = "nombre", length = 100)
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
-    @Column(name = "descripcion", length = 255)
+
+    @Column(name = "descripcion", length = 500)
     private String descripcion;
+
     @Column(name = "costobase", precision = 10, scale = 2)
-    private BigDecimal costobase;
+    private BigDecimal costoBase;
+
     @Column(name = "diasentregamin")
-    private Integer diasentregamin;
+    private Integer diasEntregaMin;
+
     @Column(name = "diasentregamax")
-    private Integer diasentregamax;
+    private Integer diasEntregaMax;
+
     @Column(name = "activo")
     private Boolean activo;
 }
