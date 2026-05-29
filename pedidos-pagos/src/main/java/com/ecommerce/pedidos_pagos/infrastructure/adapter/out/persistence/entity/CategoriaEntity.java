@@ -3,17 +3,17 @@ package com.ecommerce.pedidos_pagos.infrastructure.adapter.out.persistence.entit
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Data
 @Entity
 @Table(name = "categoria")
+@Data
 public class CategoriaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "categoriaid")
-    private Long categoriaid;
+    private Long categoriaId;
 
-    @Column(name = "nombre", nullable = false, length = 100)
+    @Column(name = "nombre", nullable = false, length = 100, unique = true)
     private String nombre;
 
     @Column(name = "descripcion", length = 255)
