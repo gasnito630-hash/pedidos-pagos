@@ -5,42 +5,42 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Usuario")
+@Table(name = "usuario")
 @Data
 public class UsuarioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "UsuarioID")
-    private Long usuarioId;
+    @Column(name = "usuarioid")
+    private Long usuarioid;
 
-    @Column(name = "Email", nullable = false, unique = true, length = 150)
+    @Column(name = "email", nullable = false, unique = true, length = 150)
     private String email;
 
-    @Column(name = "Password", nullable = false, length = 255)
+    @Column(name = "password", nullable = false, length = 255)
     private String password;
 
-    @Column(name = "Nombre", nullable = false, length = 100)
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
-    @Column(name = "Apellido", nullable = false, length = 100)
+    @Column(name = "apellido", nullable = false, length = 100)
     private String apellido;
 
-    @Column(name = "Rol", nullable = false, length = 20)
+    @Column(name = "rol", nullable = false, length = 20)
     private String rol;
 
-    @Column(name = "Activo")
+    @Column(name = "activo")
     private Boolean activo;
 
-    @Column(name = "CreadoEn")
-    private LocalDateTime creadoEn;
+    @Column(name = "creadoen")
+    private LocalDateTime creadoen;
 
-    public Long getUsuarioId() {
-        return usuarioId;
+    public Long getUsuarioid() {
+        return usuarioid;
     }
 
-    public void setUsuarioId(Long usuarioId) {
-        this.usuarioId = usuarioId;
+    public void setUsuarioid(Long usuarioid) {
+        this.usuarioid = usuarioid;
     }
 
     public String getEmail() {
@@ -91,12 +91,12 @@ public class UsuarioEntity {
         this.activo = activo;
     }
 
-    public java.time.LocalDateTime getCreadoEn() {
-        return creadoEn;
+    public java.time.LocalDateTime getCreadoen() {
+        return creadoen;
     }
 
-    public void setCreadoEn(java.time.LocalDateTime creadoEn) {
-        this.creadoEn = creadoEn;
+    public void setCreadoen(java.time.LocalDateTime creadoen) {
+        this.creadoen = creadoen;
     }
 
 }
