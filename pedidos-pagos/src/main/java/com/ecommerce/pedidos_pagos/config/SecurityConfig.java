@@ -1,5 +1,7 @@
 package com.ecommerce.pedidos_pagos.config;
 
+import com.ecommerce.pedidos_pagos.infrastructure.adapter.in.web.security.CustomOAuth2SuccessHandler;
+import com.ecommerce.pedidos_pagos.infrastructure.adapter.in.web.security.CustomOAuth2UserService;
 import com.ecommerce.pedidos_pagos.infrastructure.adapter.in.web.security.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -27,11 +29,8 @@ import java.util.Arrays;
 public class SecurityConfig implements WebMvcConfigurer {
 
         private final JwtFilter jwtFilter;
-
-        @Bean
-        public PasswordEncoder passwordEncoder() {
-                return new BCryptPasswordEncoder();
-        }
+        private final CustomOAuth2UserService customOAuth2UserService;
+        private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
 
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -46,9 +45,9 @@ public class SecurityConfig implements WebMvcConfigurer {
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                                // 4. REGLAS DE AUTORIZACIÓN - ESTO ES LO IMPORTANTE
+                                // 4. REGLAS DE AUTORIZACIÓN
                                 .authorizeHttpRequests(auth -> auth
-                                                // ✅ RUTAS PÚBLICAS (sin autenticación)
+                                                // RUTAS PÚBLICAS (sin autenticación)
                                                 .requestMatchers(
                                                                 "/",
                                                                 "/index.html",
@@ -62,23 +61,24 @@ public class SecurityConfig implements WebMvcConfigurer {
                                                                 "/*.js",
                                                                 "/*.css",
                                                                 "/*.html",
-                                                                "/api/auth/**", // Login y registro
-                                                                "/api/productos", // Catálogo público
-                                                                "/api/categorias", // Categorías públicas
-                                                                "/uploads/**" // ← ✅ AGREGAR ESTO: imágenes públicas
-                                                ).permitAll()
+                                                                "/api/auth/**",
+                                                                "/api/productos",
+                                                                "/api/categorias",
+                                                                "/uploads/**",
+                                                                "/login/oauth2/**")
+                                                .permitAll()
 
-                                                // ✅ RUTAS DE ADMIN (requieren rol ADMIN)
+                                                // RUTAS DE ADMIN (requieren rol ADMIN)
                                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
-                                                // ✅ RUTAS DE CLIENTE (requieren autenticación)
+                                                // RUTAS DE CLIENTE (requieren autenticación)
                                                 .requestMatchers(
                                                                 "/api/pedidos/**",
                                                                 "/api/direcciones/**",
                                                                 "/api/usuarios/**")
                                                 .authenticated()
 
-                                                // ✅ Cualquier otra ruta requiere autenticación
+                                                // Cualquier otra ruta requiere autenticación
                                                 .anyRequest().authenticated())
 
                                 // 5. Desactivar formularios de login/logout de Spring (usamos JWT)
@@ -86,13 +86,20 @@ public class SecurityConfig implements WebMvcConfigurer {
                                 .logout(logout -> logout.disable())
                                 .httpBasic(basic -> basic.disable())
 
-                                // 6. Agregar filtro JWT antes de la autenticación
+                                // 6. CONFIGURACION OAUTH2 (GOOGLE)
+                                .oauth2Login(oauth2 -> oauth2
+                                                .loginPage("/index.html")
+                                                .userInfoEndpoint(userInfo -> userInfo
+                                                                .userService(customOAuth2UserService))
+                                                .successHandler(customOAuth2SuccessHandler))
+
+                                // 7. Agregar filtro JWT antes de la autenticación
                                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
                 return http.build();
         }
 
-        // ✅ AGREGAR ESTE MÉTODO para servir imágenes
+        // AGREGAR ESTE MÉTODO para servir imágenes
         @Override
         public void addResourceHandlers(ResourceHandlerRegistry registry) {
                 String uploadDir = System.getProperty("user.dir") + "/uploads/";
