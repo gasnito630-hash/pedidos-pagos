@@ -5,29 +5,27 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "DetallePedido")
+@Table(name = "detallepedido")
 @Data
 public class DetallePedidoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "DetalleID")
-    private Long detalleId;
+    @Column(name = "detalleid")
+    private Long detalleid;
 
-    @Column(name = "PedidoID")
-    private Long pedidoId;
+    @Column(name = "pedidoid")
+    private Long pedidoid;
 
-    @Column(name = "ProductoID")
-    private Long productoId;
+    @Column(name = "productoid")
+    private Long productoid;
 
-    @Column(name = "Cantidad")
+    @Column(name = "cantidad")
     private Integer cantidad;
 
-    @Column(name = "PrecioUnitario", precision = 10, scale = 2)
-    private BigDecimal precioUnitario;
+    @Column(name = "preciounitario", precision = 10, scale = 2)
+    private BigDecimal preciounitario;
 
-    // ✅ ELIMINAR: Si es columna calculada, NO la mapeamos para INSERT/UPDATE
-    // Solo la leemos (opcional con @Column(insertable = false, updatable = false))
-    @Column(name = "Subtotal", precision = 10, scale = 2, insertable = false, updatable = false)
+    @Column(name = "subtotal", precision = 10, scale = 2, insertable = false, updatable = false)
     private BigDecimal subtotal;
 }
