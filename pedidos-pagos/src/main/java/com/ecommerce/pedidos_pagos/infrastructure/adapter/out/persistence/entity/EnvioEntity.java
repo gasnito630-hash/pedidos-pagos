@@ -11,28 +11,34 @@ public class EnvioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "envioid")
-    private Long envioid;
+    private Long envioId;
 
-    @Column(name = "pedidoid")
-    private Long pedidoid;
+    @Column(name = "pedidoid", nullable = false)
+    private Long pedidoId;
+
     @Column(name = "metodoenvioid")
-    private Long metodoenvioid;
+    private Long metodoEnvioId;
+
     @Column(name = "numerotracking", length = 100)
-    private String numerotracking;
+    private String numeroTracking;
+
     @Column(name = "estadoenvio", length = 50)
-    private String estadoenvio;
+    private String estadoEnvio;
+
     @Column(name = "fechaestimadaentrega")
-    private LocalDateTime fechaestimadaentrega;
+    private LocalDateTime fechaEstimadaEntrega;
+
     @Column(name = "fechaenvio")
-    private LocalDateTime fechaenvio;
+    private LocalDateTime fechaEnvio;
+
     @Column(name = "fechaentrega")
-    private LocalDateTime fechaentrega;
+    private LocalDateTime fechaEntrega;
 
     @PrePersist
     protected void onCreate() {
-        if (estadoenvio == null)
-            estadoenvio = "PREPARANDO";
-        if (fechaenvio == null)
-            fechaenvio = LocalDateTime.now();
+        if (estadoEnvio == null)
+            estadoEnvio = "PREPARANDO";
+        if (fechaEnvio == null)
+            fechaEnvio = LocalDateTime.now();
     }
 }
