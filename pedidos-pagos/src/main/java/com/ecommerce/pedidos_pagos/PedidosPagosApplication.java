@@ -10,5 +10,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class PedidosPagosApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PedidosPagosApplication.class, args);
+		app.addListeners(event -> {
+            if (event instanceof ApplicationReadyEvent) {
+                String port = System.getenv("PORT");
+                System.out.println("✅ ✅ ✅ APP LISTA EN RENDER (FREE TIER) ✅ ✅ ✅");
+                System.out.println("🔌 Escuchando en puerto: " + (port != null ? port : "default"));
+                System.out.println("💾 Memoria máxima: " + Runtime.getRuntime().maxMemory() / (1024 * 1024) + "MB");
+            }
+        });
+        
+        app.run(args);
 	}
 }
