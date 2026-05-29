@@ -5,34 +5,34 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Envio")
+@Table(name = "envio")
 @Data
 public class EnvioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "EnvioID")
-    private Long envioId;
+    @Column(name = "envioid")
+    private Long envioid;
 
-    @Column(name = "PedidoID")
-    private Long pedidoId;
-    @Column(name = "MetodoEnvioID")
-    private Long metodoEnvioId;
-    @Column(name = "NumeroTracking", length = 100)
-    private String numeroTracking;
-    @Column(name = "EstadoEnvio", length = 50)
-    private String estadoEnvio;
-    @Column(name = "FechaEstimadaEntrega")
-    private LocalDateTime fechaEstimadaEntrega;
-    @Column(name = "FechaEnvio")
-    private LocalDateTime fechaEnvio;
-    @Column(name = "FechaEntrega")
-    private LocalDateTime fechaEntrega;
+    @Column(name = "pedidoid")
+    private Long pedidoid;
+    @Column(name = "metodoenvioid")
+    private Long metodoenvioid;
+    @Column(name = "numerotracking", length = 100)
+    private String numerotracking;
+    @Column(name = "estadoenvio", length = 50)
+    private String estadoenvio;
+    @Column(name = "fechaestimadaentrega")
+    private LocalDateTime fechaestimadaentrega;
+    @Column(name = "fechaenvio")
+    private LocalDateTime fechaenvio;
+    @Column(name = "fechaentrega")
+    private LocalDateTime fechaentrega;
 
     @PrePersist
     protected void onCreate() {
-        if (estadoEnvio == null)
-            estadoEnvio = "PREPARANDO";
-        if (fechaEnvio == null)
-            fechaEnvio = LocalDateTime.now();
+        if (estadoenvio == null)
+            estadoenvio = "PREPARANDO";
+        if (fechaenvio == null)
+            fechaenvio = LocalDateTime.now();
     }
 }
