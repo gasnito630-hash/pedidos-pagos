@@ -6,45 +6,40 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Pago")
+@Table(name = "pago")
 @Data
 public class PagoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "PagoID")
-    private Long pagoId;
+    @Column(name = "pagoid")
+    private Long pagoid;
 
-    @Column(name = "PedidoID")
-    private Long pedidoId;
+    @Column(name = "pedidoid")
+    private Long pedidoid;
 
-    @Column(name = "MetodoPago", length = 20)
-    private String metodoPago;
+    @Column(name = "metodopago", length = 20)
+    private String metodopago;
 
-    // ✅ USAR "Monto" (como está en la BD), no "MontoPago"
-    @Column(name = "Monto", precision = 10, scale = 2)
+    @Column(name = "monto", precision = 10, scale = 2)
     private BigDecimal monto;
 
-    @Column(name = "EstadoPago", length = 20)
-    private String estadoPago;
+    @Column(name = "estadopago", length = 20)
+    private String estadopago;
 
-    @Column(name = "TransaccionExterna", length = 100)
-    private String transaccionExterna;
+    @Column(name = "transaccionexterna", length = 100)
+    private String transaccionexterna;
 
-    @Column(name = "FechaPago")
-    private LocalDateTime fechaPago;
+    @Column(name = "fechapago")
+    private LocalDateTime fechapago;
 
     @PrePersist
     protected void onCreate() {
-        if (fechaPago == null) {
-            fechaPago = LocalDateTime.now();
+        if (fechapago == null) {
+            fechapago = LocalDateTime.now();
         }
-        if (estadoPago == null) {
-            estadoPago = "COMPLETADO";
+        if (estadopago == null) {
+            estadopago = "COMPLETADO";
         }
     }
-
-    // Si @Data no genera los getters/setters, agrégalos manualmente:
-    // public BigDecimal getMonto() { return monto; }
-    // public void setMonto(BigDecimal monto) { this.monto = monto; }
 }
