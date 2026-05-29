@@ -7,45 +7,39 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "Producto", schema = "dbo")
+@Table(name = "producto", schema = "dbo")
 public class ProductoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ProductoID")
-    private Long productoId;
+    @Column(name = "productoid")
+    private Long productoid;
 
-    @Column(name = "Nombre", nullable = false, length = 100)
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
-    @Column(name = "SKU", nullable = false, length = 20, unique = true)
+    @Column(name = "sku", nullable = false, length = 20, unique = true)
     private String sku;
 
-    @Column(name = "Precio", nullable = false, precision = 10, scale = 2)
+    @Column(name = "precio", nullable = false, precision = 10, scale = 2)
     private BigDecimal precio;
 
-    @Column(name = "Stock", nullable = false)
+    @Column(name = "stock", nullable = false)
     private Integer stock;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CategoriaID")
+    @JoinColumn(name = "categoriaid")
     private CategoriaEntity categoria;
 
-    // ✅ ESTE CAMPO DEBE ESTAR AQUÍ
-    @Column(name = "ImagenURL", length = 500)
-    private String imagenUrl;
+    @Column(name = "imagenurl", length = 500)
+    private String imagenurl;
 
-    // Si usas relaciones inversas, pueden estar aquí
-    // @OneToMany(mappedBy = "producto")
-    // private List<PedidoProductoEntity> pedidoProductos;
-
-    // Getters y Setters manuales (por si Lombok falla)
-    public Long getProductoId() {
-        return productoId;
+    public Long getProductoid() {
+        return productoid;
     }
 
-    public void setProductoId(Long productoId) {
-        this.productoId = productoId;
+    public void setProductoid(Long productoid) {
+        this.productoid = productoid;
     }
 
     public String getNombre() {
@@ -88,13 +82,12 @@ public class ProductoEntity {
         this.categoria = categoria;
     }
 
-    // ✅ GETTER Y SETTER PARA imagenUrl (CRÍTICO)
-    public String getImagenUrl() {
-        System.out.println("DEBUG: getImagenUrl llamado para " + nombre + " = " + imagenUrl);
-        return imagenUrl;
+    public String getImagenurl() {
+        System.out.println("DEBUG: getImagenurl llamado para " + nombre + " = " + imagenurl);
+        return imagenurl;
     }
 
-    public void setImagenUrl(String imagenUrl) {
-        this.imagenUrl = imagenUrl;
+    public void setImagenurl(String imagenurl) {
+        this.imagenurl = imagenurl;
     }
 }
